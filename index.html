@@ -951,7 +951,7 @@ body.mobile #qa-handle>span:nth-child(2),body.mobile #qa-handle .qh-dot{display:
   document.body.classList.toggle('mobile', ds.mobile);
   Reveal.initialize({
     hash:true, transition: WK.shot ? 'none' : 'slide', backgroundTransition:'fade',
-    fragments: !WK.clean, center:ds.center, touch:ds.touch, progress:true, controls:true, slideNumber:'c/t',
+    fragments: !WK.shot, center:ds.center, touch:ds.touch, progress:true, controls:true, slideNumber:'c/t',
     width:ds.width, height:ds.height, margin:ds.margin, minScale:0.2, maxScale:2,
     view:null, scrollActivationWidth:null, plugins:[RevealNotes]
   });

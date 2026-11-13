@@ -3,7 +3,7 @@
  * 用法：把 workshop-kit.css / workshop-kit.js 複製到專案 kit/，在 index.html：
  *   <link rel="stylesheet" href="kit/workshop-kit.css">
  *   <script src="kit/workshop-kit.js"></script>      ← 放在 reveal.js 之後、Reveal.initialize 之前
- *   Reveal.initialize({ ..., fragments: !WK.clean })  ← 聽眾版展開所有逐步內容
+ *   Reveal.initialize({ ..., fragments: !WK.shot })   ← 截圖／聽眾版／稽核展開所有逐步內容
  *   WK.init({ total: 150 })                           ← 有 data-at 的工作坊才給 total（分鐘）
  *
  * 網址參數：

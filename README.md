@@ -3,8 +3,11 @@
 Reveal.js 互動研討會簡報（html-slide-builder 轉入版），150 分鐘、42 頁、5 段實作。
 原單檔版 `../戶外求生三角形_互動研討會簡報.html` 的內容、頁序與配速照舊，另加聽眾手機互動。
 
-- **預定網址（尚未部署）**：https://phu00572.github.io/outdoor-survival-triangle/
-- **本機預覽**：用 Chrome／Edge 開 `index.html`（版面與離線互動都能用；Firebase 互動要部署後才會運作）
+- **線上網址**：https://phu00572.github.io/outdoor-survival-triangle/
+- **講稿**：[講稿.pdf](講稿.pdf)（每頁畫面＋建議秒數＋講稿，全場 150 分鐘）
+- **聽眾講義**：[簡報講義_聽眾版.pdf](簡報講義_聽眾版.pdf)（隱藏操作介面、展開翻牌與答案）
+- **本機預覽**：用 Chrome／Edge 開 `index.html`（版面與離線互動都能用；Firebase 互動只在線上網址運作）
+- 原單檔版已標註「舊版，不再更新」，之後只修改本專案。
 
 ## 鍵盤快捷鍵
 
