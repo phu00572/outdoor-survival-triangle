@@ -1,0 +1,5 @@
+_source/
+_shots/
+*.orig.*
+*.log
+clear_data.py

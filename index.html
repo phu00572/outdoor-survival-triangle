@@ -1,0 +1,1248 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>戶外求生三角形</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="kit/workshop-kit.css">
+<script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{
+  --ink:#1E2A24; --muted:#5F6B64; --paper:#F5F2EA; --card:#FFFFFF; --line:#DDD6C8;
+  --forest:#1F3B2D; --loc:#2E7D9A; --com:#D9822B; --sur:#C0392B; --ok:#2F8F5B;
+  --sec:var(--forest);
+  --serif:"Noto Serif TC","Source Han Serif TC","PMingLiU",serif;
+  --sans:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--paper);font-family:var(--sans);color:var(--ink)}
+.pg{position:absolute;inset:0;padding:96px 90px 70px;display:flex;flex-direction:column;background:var(--paper);text-align:left;box-sizing:border-box}
+.pg[data-part="loc"]{--sec:var(--loc)} .pg[data-part="com"]{--sec:var(--com)} .pg[data-part="sur"]{--sec:var(--sur)} .pg[data-part="act"]{--sec:var(--forest)}
+/* chrome */
+.tag{position:absolute;top:34px;left:90px;display:flex;gap:12px;align-items:center;font-size:18px;font-weight:700;color:var(--muted);letter-spacing:.06em}
+.tag .dot{width:14px;height:14px;border-radius:50%;background:var(--sec)}
+.tag b{color:var(--sec)}
+h1,h2,h3{margin:0;font-family:var(--serif);font-weight:900;line-height:1.2}
+h2{font-size:54px;margin-bottom:28px;color:var(--ink)}
+h2 small{display:block;font-family:var(--sans);font-size:24px;font-weight:500;color:var(--muted);margin-top:10px}
+h3{font-size:30px;margin-bottom:12px}
+p,li{font-size:24px;line-height:1.6}
+ul,ol{margin:0;padding-left:1.2em}
+.muted{color:var(--muted)}
+.hl{color:var(--sec);font-weight:900}
+.mark{background:linear-gradient(transparent 58%,rgba(217,130,43,.32) 58%)}
+.grow{flex:1;min-height:0}
+.fit{flex:none!important}
+.pg.vc.active{justify-content:center;padding-bottom:110px}
+.pg.vc .card{padding:34px 36px}
+.row{display:flex;gap:36px;align-items:stretch}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:40px;flex:1;min-height:0}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.cols4{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.g2x2{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:24px;flex:1;min-height:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 30px;box-shadow:0 4px 14px rgba(30,42,36,.06)}
+.card.sec{border-top:8px solid var(--sec)}
+.card h3{color:var(--sec)}
+.card p,.card li{font-size:22px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;background:var(--sec);color:#fff;font-weight:900;font-size:22px;flex:none}
+.steps{display:flex;flex-direction:column;gap:16px}
+.step{display:flex;gap:18px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 22px}
+.step p{margin:4px 0 0;font-size:22px;line-height:1.5}
+.pic{width:100%;height:100%;object-fit:contain;border-radius:12px;background:#fff;cursor:zoom-in}
+.picbox{min-height:0;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px;overflow:hidden}
+.cap{font-size:15px;color:var(--muted);margin-top:8px;text-align:center}
+.badge{display:inline-block;background:var(--sec);color:#fff;border-radius:999px;padding:6px 18px;font-size:20px;font-weight:700;letter-spacing:.04em}
+.big{font-family:var(--serif);font-weight:900;font-size:120px;line-height:1;color:var(--sec)}
+/* dark / background slides */
+.pg.dark{background:var(--forest);color:#F3EFE4}
+.pg.dark h1,.pg.dark h2{color:#fff}
+.pg.dark .tag{color:#C9D4CC}
+.pg.bg{background-size:cover;background-position:center;color:#fff}
+.pg.bg::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,28,21,.86) 0%,rgba(15,28,21,.55) 55%,rgba(15,28,21,.15) 100%)}
+.pg.bg.light::before{background:linear-gradient(90deg,rgba(245,242,234,.95) 0%,rgba(245,242,234,.7) 55%,rgba(245,242,234,.1) 100%)}
+.pg.bg.light{color:var(--ink)}
+.pg.bg>*{position:relative}
+.pg.bg .tag{position:absolute}
+.divider h1{font-size:110px;color:#fff}
+.divider .kicker{font-size:30px;letter-spacing:.3em;color:#E8C99B;font-weight:700;margin-bottom:18px}
+/* buttons & widgets */
+button{font-family:var(--sans);cursor:pointer}
+.btn{border:2px solid var(--sec);background:#fff;color:var(--sec);border-radius:12px;padding:10px 20px;font-size:20px;font-weight:700}
+.btn.fill{background:var(--sec);color:#fff}
+.btn:hover{filter:brightness(.95)}
+.timer{white-space:nowrap;display:inline-flex;align-items:center;gap:14px;background:var(--ink);color:#fff;border-radius:16px;padding:10px 18px}
+.timer .t{font-family:ui-monospace,Consolas,monospace;font-size:44px;font-weight:700;min-width:150px;text-align:center}
+.timer .t.warn{color:#FFB25B}.timer .t.over{color:#FF6B5B}
+.timer button{background:#ffffff22;border:0;color:#fff;border-radius:10px;padding:10px 14px;font-size:18px;font-weight:700}
+.timer .lb{font-size:16px;color:#C9D4CC;max-width:110px;line-height:1.3}
+input.f{font-size:24px;padding:10px 14px;border:2px solid var(--line);border-radius:10px;font-family:ui-monospace,Consolas,monospace;width:100%}
+input.f:focus{outline:none;border-color:var(--sec)}
+.ok{color:var(--ok);font-weight:900}.bad{color:var(--sur);font-weight:900}
+/* flip cards */
+.flip{perspective:1200px;cursor:pointer}
+.flip .in{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.flip.on .in{transform:rotateY(180deg)}
+.flip .fa,.flip .fb{position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;padding:28px;display:flex;flex-direction:column;justify-content:center}
+.flip .fa{background:#fff;border:2px dashed var(--line)}
+.flip .fb{background:var(--sec);color:#fff;transform:rotateY(180deg)}
+.flip .fb p{color:#fff}
+.hint{font-size:16px;color:var(--muted)}
+/* quiz */
+.q{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 24px}
+.q .qt{font-size:23px;font-weight:700;margin-bottom:10px}
+.q .opts{display:flex;flex-wrap:wrap;gap:10px}
+.q .opts button{border:2px solid var(--line);background:#FAF8F3;border-radius:10px;padding:8px 16px;font-size:19px}
+.q .opts button.right{background:var(--ok);border-color:var(--ok);color:#fff}
+.q .opts button.wrong{background:#F6D5D0;border-color:var(--sur);color:var(--sur)}
+.q .fb{font-size:18px;margin-top:8px;min-height:1.5em;color:var(--muted)}
+/* triangle */
+#tri .v{cursor:pointer;transition:.2s}
+#tri .v:hover{filter:brightness(1.1)}
+#tri .v.sel circle{stroke:#1E2A24;stroke-width:6}
+/* order game */
+.pool{display:flex;flex-wrap:wrap;gap:12px}
+.pool button{background:#fff;border:2px solid var(--line);border-radius:12px;padding:12px 16px;font-size:20px;text-align:left;max-width:420px}
+.pool button.used{opacity:.25;pointer-events:none}
+.chain{display:flex;flex-direction:column;gap:10px}
+.chain .c{display:flex;gap:14px;align-items:center;background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 16px;font-size:20px;min-height:54px}
+.chain .c.good{border-color:var(--ok);background:#EAF6EF}
+.chain .c.no{border-color:var(--sur);background:#FBEAE7}
+/* checklist */
+.chk{display:grid;grid-template-columns:1fr 1fr;gap:10px 30px}
+.chk label{display:flex;gap:14px;align-items:flex-start;font-size:21px;line-height:1.45;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 16px;cursor:pointer}
+.chk input{width:24px;height:24px;margin-top:4px;accent-color:var(--ok);flex:none}
+.chk label.done{background:#EAF6EF;border-color:#BFE3CD}
+/* slider */
+input[type=range]{width:100%;accent-color:var(--sur);height:30px}
+
+/* ===== Reveal.js 轉入 ===== */
+.reveal{font-family:var(--sans);color:var(--ink)}
+.reveal .slides{text-align:left}
+.reveal .slides>section{height:100%;padding:0!important;box-sizing:border-box}
+.reveal .slides>section>.pg{position:absolute;inset:0}
+.reveal .controls{color:var(--forest)}
+.reveal .progress{color:var(--com);height:6px}
+.reveal .slide-number{background:transparent;color:var(--muted);font-family:ui-monospace,Consolas,monospace;font-size:15px;right:22px;bottom:14px}
+.reveal img{max-width:none;margin:0}
+.reveal button{font-family:var(--sans)}
+img.pic{cursor:zoom-in}
+/* 聽眾版（?clean）：翻牌翻開 */
+html.wk-clean .flip .in{transform:rotateY(180deg)}
+/* 互動頁（Firebase） */
+.fb-panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+.fb-input{width:100%;font-size:22px;padding:10px 14px;border:2px solid var(--line);border-radius:10px;font-family:var(--sans);box-sizing:border-box}
+.fb-input:focus{outline:none;border-color:var(--sec)}
+.live{display:inline-block;background:#ff4757;color:#fff;padding:2px 10px;border-radius:10px;font-size:15px;vertical-align:middle;animation:pulse 1.5s infinite;margin-left:8px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.qr-box{background:#fff;padding:8px;border-radius:10px;border:1px solid var(--line);display:inline-block}
+.qr-box img,.qr-box canvas{display:block}
+.poll-opt{width:100%;display:flex;align-items:center;gap:16px;padding:16px 22px;background:#fff;border:2px solid var(--line);border-radius:14px;font-size:26px;cursor:pointer;text-align:left}
+.poll-opt .pk{flex:0 0 30px;height:30px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff}
+.poll-opt .pb{flex:0 0 260px;height:14px;background:#EFE9DC;border-radius:7px;overflow:hidden}
+.poll-opt .pb span{display:block;height:100%;width:0;background:var(--sec);transition:width .4s}
+.poll-opt .pp{flex:0 0 70px;text-align:right;color:var(--muted);font-size:22px}
+.poll-opt.answer{border-color:var(--ok);background:#EAF6EF}
+/* 全域提問牆（沿用 html-slide-builder 側邊欄） */
+#qa-sidebar{position:fixed;top:0;left:0;height:100vh;width:340px;background:linear-gradient(180deg,#22382c,#15241c);border-right:1px solid rgba(255,255,255,.2);box-shadow:6px 0 30px rgba(0,0,0,.45);transform:translateX(-100%);transition:transform .35s ease;z-index:1000;color:#fff}
+#qa-sidebar.open{transform:translateX(0)}
+#qa-sidebar .qa-inner{display:flex;flex-direction:column;height:100%;padding:26px 20px;box-sizing:border-box}
+#qa-handle{position:absolute;right:-46px;top:50%;transform:translateY(-50%);width:46px;padding:18px 0;background:var(--com);color:#fff;border:none;border-radius:0 12px 12px 0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;box-shadow:3px 0 12px rgba(0,0,0,.3)}
+#qa-handle .qh-dot{width:7px;height:7px;border-radius:50%;background:#fff;animation:pulse 1.5s infinite}
+#qa-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .35s;z-index:999}
+#qa-overlay.show{opacity:1;pointer-events:auto}
+.ui-input{width:100%;padding:9px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:#fff;font-size:15px;box-sizing:border-box;font-family:inherit;outline:none}
+.ui-btn{padding:9px 14px;background:var(--com);color:#fff;border:none;border-radius:8px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit}
+.ui-btn:disabled{opacity:.5}
+.qa-item{background:rgba(255,255,255,.08);border-left:3px solid var(--com);border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:15px;display:flex;align-items:center;gap:10px}
+.qa-text{flex:1;line-height:1.5}
+.qa-like{flex:0 0 auto;background:rgba(217,130,43,.2);border:1px solid rgba(217,130,43,.6);color:#FFD7A8;border-radius:20px;padding:4px 10px;cursor:pointer;font-size:14px;white-space:nowrap}
+/* ===== 手機直式（body.mobile）：單欄、頁內捲動 ===== */
+body.mobile .reveal .slides>section.present,body.mobile .reveal .slides>section.past,body.mobile .reveal .slides>section.future{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+body.mobile .reveal .slides>section>.pg{position:relative;inset:auto;min-height:100%;height:auto;padding:70px 22px 90px}
+body.mobile .pg .tag{left:22px;top:22px;font-size:16px}
+body.mobile .cols2,body.mobile .cols3,body.mobile .cols4,body.mobile .g2x2,body.mobile .chk{grid-template-columns:1fr!important;grid-template-rows:none!important}
+body.mobile .row{flex-direction:column}
+body.mobile .row>*{flex:none!important;width:100%}
+body.mobile .grow{flex:none}
+body.mobile .cols2>*,body.mobile .cols3>*,body.mobile .g2x2>*,body.mobile .row>*{min-width:0}
+body.mobile .picbox,body.mobile .pic{max-width:100%}
+body.mobile .copybox{white-space:pre-wrap;word-break:break-all}
+body.mobile .picbox{max-height:520px}
+body.mobile .pic{max-height:500px}
+body.mobile .flip{height:300px}
+body.mobile h2{font-size:42px}
+body.mobile .divider h1,body.mobile .pg h1{font-size:72px!important}
+body.mobile .poll-opt .pb{flex-basis:120px}
+body.mobile .reveal .controls .controls-arrow{width:52px;height:52px}
+body.mobile #qa-handle{top:auto;bottom:16px;right:-48px;transform:none;width:48px;height:48px;padding:0;border-radius:50%;justify-content:center}
+body.mobile #qa-handle>span:nth-child(2),body.mobile #qa-handle .qh-dot{display:none}
+</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+<section data-section="引起動機" data-at="0" data-title="封面">
+<div class="pg bg" data-part="intro" style="background-image:url(images/cover_triangle.jpg)">
+  <div style="margin-top:110px;max-width:900px">
+    <div class="badge" style="background:#D9822B">山域安全研討會 · 150 分鐘含實作</div>
+    <h1 style="font-size:104px;margin:28px 0 18px;color:#fff">戶外求生三角形</h1>
+    <p style="font-size:40px;font-weight:700;color:#F3E2C4;margin:0">定位 · 通報 · 自救</p>
+    <p style="font-size:24px;color:#D7DED9;margin-top:60px">講師：尤翰彬（小B）</p>
+  </div>
+  <aside class="notes" data-sec="120">開場 2 分鐘。歡迎學員，請大家把手機充飽電、開啟定位，今天有 5 段實作要用到手機。按 T 開始課程計時，按 N 顯示講稿，按 O 看全部頁面。</aside>
+</div>
+</section>
+<section data-section="引起動機" data-at="2" data-title="講師介紹">
+<div class="pg" data-part="intro">
+  <div class="tag"><span class="dot"></span>開場 · <b>講師介紹</b></div>
+  <div class="cols2" style="grid-template-columns:1.25fr 1fr">
+    <div class="picbox"><img class="pic wk-zoom" src="images/lecturer.jpg" alt="尤翰彬專業資歷介紹"></div>
+    <div class="picbox"><img class="pic wk-zoom" src="images/lecturer_list.jpg" alt="尤翰彬學經歷與證照清單"></div>
+  </div>
+  <aside class="notes" data-sec="180">簡短介紹：搜救與登山教學教練、救護與醫療證照、專業戶外認證、活動主辦與榮譽。重點不在頭銜，而是「這些內容來自實際搜救現場」。</aside>
+</div>
+</section>
+<section data-section="引起動機" data-at="5" data-title="今天的 150 分鐘">
+<div class="pg" data-part="intro">
+  <div class="tag"><span class="dot"></span>開場 · <b>課程地圖</b></div>
+  <h2>今天的 150 分鐘<small>先懂原理，再動手做，最後整合演練</small></h2>
+  <div id="agenda" class="grow" style="display:flex;flex-direction:column;justify-content:center;gap:12px"></div>
+  <aside class="notes" data-sec="120">說明課程節奏：每 10～15 分鐘換一種活動。五段實作分別是：讀座標、地圖標點、網頁定位、即時位置分享、綜合演練。</aside>
+</div>
+</section>
+<section data-section="引起動機" data-at="7" data-title="這樣環境你能自救？">
+<div class="pg" data-part="intro">
+  <div class="tag"><span class="dot"></span>引起動機 · <b>問題引入</b></div>
+  <h2>這樣的環境，你能自救嗎？</h2>
+  <div class="cols2" style="grid-template-columns:1.5fr 1fr">
+    <div style="display:flex;flex-direction:column;min-height:0">
+      <div class="picbox grow"><img class="pic wk-zoom" src="images/s2_rain.jpg" alt="2024 年南二段事件 23 日累積雨量圖"></div>
+      <div class="cap">2024 年南二段事件 · 23 日累積雨量圖</div>
+    </div>
+    <div style="display:flex;flex-direction:column;min-height:0">
+      <div class="picbox grow"><img class="pic wk-zoom" src="images/qilai_1971.jpg" alt="1971 年清華大學奇萊事件"></div>
+      <div class="cap">1971 年清華大學奇萊事件</div>
+    </div>
+  </div>
+  <div class="fragment" style="margin-top:20px;font-size:26px;font-weight:700">🙋 舉手調查：你曾在山上「完全沒有訊號」超過半天嗎？</div>
+  <aside class="notes" data-sec="120">先不講答案，讓畫面說話。從 1971 年奇萊事件到 2024 年南二段，50 年過去，裝備變了，但「定位、通報、自救」這三件事的難度沒有消失。補充：攀「能高安東軍」遇最強春雨，領隊亡、美籍女教授失聯的新聞也可引用。</aside>
+</div>
+</section>
+<section id="wordcloud" data-section="引起動機" data-at="9" data-title="破冰文字雲">
+<div class="pg" data-part="intro">
+  <div class="tag"><span class="dot"></span>引起動機 · <b>破冰</b></div>
+  <h2>上山時，你靠什麼求救？<small>用手機掃 QR code，輸入一個關鍵詞（可以送出好幾次）</small></h2>
+  <div class="grow" style="display:grid;grid-template-columns:360px 1fr;gap:24px;min-height:0">
+    <div style="display:flex;flex-direction:column;gap:14px;min-height:0">
+      <div class="fb-panel" style="display:flex;gap:16px;align-items:center"><div class="qr-box" id="qr-wc"></div><p style="margin:0;font-size:18px" class="muted">掃描加入<br>不用登入</p></div>
+      <div class="fb-panel" style="display:flex;flex-direction:column;gap:10px" data-prevent-swipe>
+        <input id="wc-input" class="fb-input" type="text" maxlength="20" placeholder="例：手機、無線電、哨子">
+        <button id="wc-btn" class="btn fill">送出</button>
+      </div>
+      <div class="fb-panel grow" style="overflow:auto">
+        <div style="font-weight:900;color:var(--sec);margin-bottom:6px">熱門答案<span class="live">LIVE</span></div>
+        <div id="wc-list" style="font-size:20px"></div>
+        <p class="muted" style="font-size:16px;margin:8px 0 0">共 <b id="wc-total">0</b> 則・<b id="wc-unique">0</b> 種答案</p>
+      </div>
+    </div>
+    <div class="fb-panel" style="position:relative;padding:0;overflow:hidden">
+      <canvas id="wc-canvas" style="width:100%;height:100%;display:block"></canvas>
+      <div id="wc-empty" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:24px;text-align:center">輸入第一個答案<br>文字雲就會出現</div>
+    </div>
+  </div>
+  <aside class="notes" data-sec="60">請大家用手機掃 QR code，輸入「上山時你靠什麼求救」。等 30～40 秒，挑兩三個詞回應：多數人會寫手機——今天就是要告訴大家，手機只是三角形的其中一種工具，沒有一個方法是保證有用的。（網路不穩時改成舉手調查。）</aside>
+</div>
+</section>
+<section data-section="引起動機" data-at="10" data-title="南二段：最後的訊號">
+<div class="pg" data-part="intro">
+  <div class="tag"><span class="dot"></span>案例 · <b>2024 年 7 月南二段事件（凱米颱風）</b></div>
+  <div class="cols2" style="grid-template-columns:1.55fr 1fr">
+    <div class="picbox"><img class="pic wk-zoom" src="images/s2_signal.jpg" alt="最後通訊與手機短暫收訊位置"></div>
+    <div class="steps" style="justify-content:center">
+      <div class="step fragment"><span class="num">20</span><p><b>7/20</b> 上午由向陽出發</p></div>
+      <div class="step fragment"><span class="num">21</span><p><b>7/21</b> 經嘉明湖國家步道往拉庫音溪山屋</p></div>
+      <div class="step fragment"><span class="num">22</span><p><b>7/22</b> 登頂雲峰，已讀到颱風訊息；<span class="mark">當天是與留守人最後一次通訊</span></p></div>
+      <div class="step fragment"><span class="num">24</span><p><b>7/24 16:26</b> 隊員手機短暫連上花蓮玉里基地台 → 研判位於零星收訊區</p></div>
+    </div>
+  </div>
+  <aside class="notes" data-sec="180">逐步按出時序。強調：手機只有「零星收訊」——一次短暫的基地台通聯紀錄，成為搜救研判位置的重要線索。</aside>
+</div>
+</section>
+<section data-section="引起動機" data-at="13" data-title="南二段：預定行程">
+<div class="pg" data-part="intro">
+  <div class="tag"><span class="dot"></span>案例 · <b>預定行程與路線</b></div>
+  <div class="cols2" style="grid-template-columns:1.4fr 1fr">
+    <div class="picbox"><img class="pic wk-zoom" src="images/s2_route.jpg" alt="南二段事件的預定行程與路線"></div>
+    <div style="display:flex;flex-direction:column;gap:20px;justify-content:center">
+      <div class="card sec">
+        <h3>兩人一組 · 3 分鐘討論</h3>
+        <p style="margin:0 0 10px"><b>A 是隊員：</b>7/22 在雲峰讀到颱風訊息，你會怎麼做？</p>
+        <p style="margin:0"><b>B 是留守人：</b>7/23 聯絡不上隊伍，你會怎麼做？</p>
+      </div>
+      <div class="fragment card" style="background:#FFF7EC">
+        <p style="margin:0;font-size:21px">這個案例同時說明三件事：<br><b style="color:var(--loc)">定位</b>要有手機以外的備援；<b style="color:var(--com)">通報</b>不能只靠零星收訊的手機；<b style="color:var(--sur)">自救</b>取決於氣象研判與停損決斷。</p>
+      </div>
+      <div class="wk-timer" data-min="3" data-label="討論時間"></div>
+    </div>
+  </div>
+  <aside class="notes" data-sec="240">預定行程：向陽 → 嘉明湖 → 拉庫音溪山屋 → 轆轆谷山屋 → 塔芬谷山屋 → 大水窟山屋。讓兩三組分享，再揭露三個重點，接到下一頁「求生三角形」。</aside>
+</div>
+</section>
+<section data-section="引起動機" data-at="17" data-title="戶外求生三角形">
+<div class="pg" data-part="intro">
+  <div class="tag"><span class="dot"></span>核心概念 · <b>戶外求生三角形</b></div>
+  <h2>三件事，缺一不可<small>點選三角形的頂點，看各面向的工具與方法</small></h2>
+  <div class="cols2" style="grid-template-columns:1fr 1.05fr">
+    <svg id="tri" viewBox="0 0 600 540" style="width:100%;height:100%">
+      <polygon points="300,60 545,470 55,470" fill="#EFE9DC" stroke="#1E2A24" stroke-width="4"/>
+      <text x="300" y="330" text-anchor="middle" font-size="30" font-weight="900" fill="#1E2A24" font-family="Noto Serif TC,serif">沒有一個方法</text>
+      <text x="300" y="372" text-anchor="middle" font-size="30" font-weight="900" fill="#1E2A24" font-family="Noto Serif TC,serif">是保證有用</text>
+      <g class="v" data-k="loc"><circle cx="300" cy="80" r="66" fill="#2E7D9A"/><text x="300" y="92" text-anchor="middle" font-size="36" font-weight="900" fill="#fff">定位</text></g>
+      <g class="v" data-k="com"><circle cx="520" cy="450" r="66" fill="#D9822B"/><text x="520" y="462" text-anchor="middle" font-size="36" font-weight="900" fill="#fff">通報</text></g>
+      <g class="v" data-k="sur"><circle cx="80" cy="450" r="66" fill="#C0392B"/><text x="80" y="462" text-anchor="middle" font-size="36" font-weight="900" fill="#fff">自救</text></g>
+    </svg>
+    <div id="triInfo" class="card" style="display:flex;flex-direction:column;justify-content:center">
+      <p class="muted" style="margin:0">👆 點選左邊任一頂點</p>
+      <p style="margin-top:20px"><button class="btn" data-zoom="images/triangle_info.jpg">看原簡報三角形全圖</button></p>
+    </div>
+  </div>
+  <aside class="notes" data-sec="240">三個面向：定位＝運用各種方式標定你的所在地；通報＝運用各種方式將你的位置傳出去；自救＝運用各種方式活下去。關鍵原則：讓自己留在好位置——容易被找到、能收到訊號、能躲避風雨。</aside>
+</div>
+</section>
+<section data-section="引起動機" data-at="21" data-title="三個常見誤解">
+<div class="pg" data-part="intro">
+  <div class="tag"><span class="dot"></span>迷思澄清 · <b>你也這樣想嗎？</b></div>
+  <h2>三個常見誤解<small>點擊卡片翻面</small></h2>
+  <div class="cols3 grow">
+    <div class="flip" style="--sec:var(--loc)"><div class="in">
+      <div class="fa"><div class="bad" style="font-size:22px">❌ 誤解 1</div><p style="font-size:34px;font-weight:900;margin:14px 0">「沒有訊號，<br>手機就不能定位」</p><span class="hint">點擊翻面</span></div>
+      <div class="fb"><div style="font-size:22px;font-weight:900">✅ 正確理解</div><p>衛星定位是手機<b>單向接收</b>衛星訊號，沒有基地台一樣能定位、也不用付費。<br>但上山前先在登山口完成定位（熱開機）會快很多。</p></div>
+    </div></div>
+    <div class="flip" style="--sec:var(--com)"><div class="in">
+      <div class="fa"><div class="bad" style="font-size:22px">❌ 誤解 2</div><p style="font-size:34px;font-weight:900;margin:14px 0">「手機有 GPS<br>就夠了」</p><span class="hint">點擊翻面</span></div>
+      <div class="fb"><div style="font-size:22px;font-weight:900">✅ 正確理解</div><p>手機會沒電、摔壞、進水、遺失。紙圖、指北針、多種通報手段都是備援——<b>沒有一個方法保證有用</b>。</p></div>
+    </div></div>
+    <div class="flip" style="--sec:var(--sur)"><div class="in">
+      <div class="fa"><div class="bad" style="font-size:22px">❌ 誤解 3</div><p style="font-size:34px;font-weight:900;margin:14px 0">「按下 SOS，<br>馬上就有人來」</p><span class="hint">點擊翻面</span></div>
+      <div class="fb"><div style="font-size:22px;font-weight:900">✅ 正確理解</div><p>SOS 要經國際中心轉國內權責單位，出勤受天候、資源、技術可行性限制。等待期間要靠<b>自救</b>：保暖、留在好位置。</p></div>
+    </div></div>
+  </div>
+  <aside class="notes" data-sec="240">先請學員舉手：同意第一張的人有多少？再翻面。inReach 服務條款也寫明：緊急應變人員依其準則決定何時、如何搜救，受作業限制、資源、氣象條件等限制。</aside>
+</div>
+</section>
+<section data-section="定位" data-at="25" data-title="Part 1 定位">
+<div class="pg bg divider" data-part="loc" style="background-image:url(images/bg_fog_one.jpg)">
+  <div style="margin:auto 0">
+    <div class="kicker">PART 1 · 25–65 分</div>
+    <h1>定位</h1>
+    <p style="font-size:34px;color:#E9EEEA;margin-top:20px">運用各種方式，標定你的所在地</p>
+  </div>
+</div>
+<aside class="notes" data-sec="90"></aside></section>
+<section data-section="定位" data-at="25" data-title="手機為什麼能定位">
+<div class="pg" data-part="loc">
+  <div class="tag"><span class="dot"></span>定位 · <b>衛星定位原理</b></div>
+  <h2>手機的「GPS」，其實是四套系統<small>全球衛星導航系統（GNSS）</small></h2>
+  <div class="row" style="flex:1;align-items:center">
+    <div style="flex:0 0 380px;text-align:center">
+      <div class="big">4</div>
+      <p style="font-size:28px;font-weight:900;margin:10px 0 0">顆衛星</p>
+      <p class="muted" style="margin:6px 0 0">至少需要 4 顆，才能算出<br>經度、緯度、高度（三維位置）</p>
+    </div>
+    <div class="g2x2" style="flex:1;height:440px">
+      <div class="card sec fragment"><h3>GPS · 美國</h3><p style="margin:0">運作中 32 顆（承諾至少 24 顆可用）<br>中軌道約 20,200 公里，每天繞地球兩圈</p></div>
+      <div class="card sec fragment"><h3>GLONASS · 俄羅斯</h3><p style="margin:0">24 顆運作中</p></div>
+      <div class="card sec fragment"><h3>Galileo · 歐盟</h3><p style="margin:0">2024 年宣告全面運作</p></div>
+      <div class="card sec fragment"><h3>北斗 BDS · 中國</h3><p style="margin:0">2020 年正式啟用<br>運作系統由 35 顆衛星組成</p></div>
+    </div>
+  </div>
+  <p class="fragment" style="margin:18px 0 0;font-size:24px">📱 2020 年以後的手機晶片大多能同時接收四套系統——<span class="hl">可用衛星越多，定位越快、越穩</span>。</p>
+  <aside class="notes" data-sec="90">接收器用衛星訊號的傳送時間計算距離。數字為 2026 年查證資料（GPS 於 2026 年 4 月最後一顆 GPS III 入軌後為 32 顆運作中）。這頁是背景知識，不要停留太久。</aside>
+</div>
+</section>
+<section data-section="定位" data-at="28" data-title="冷開機 vs 熱開機">
+<div class="pg vc" data-part="loc">
+  <div class="tag"><span class="dot"></span>定位 · <b>手機定位的特性</b></div>
+  <h2>上山前，先在登山口完成定位</h2>
+  <div class="cols2 fit">
+    <div class="card" style="border-top:8px solid #9AA59F">
+      <h3 style="color:#5F6B64">❄️ 冷開機</h3>
+      <p>只靠衛星訊號從頭定位</p>
+      <p class="big" style="font-size:72px;color:#9AA59F">很慢</p>
+      <p class="muted">在沒網路的山區第一次定位，可能要等很久</p>
+    </div>
+    <div class="card sec">
+      <h3>🔥 熱開機（A-GPS 輔助定位）</h3>
+      <p>有網路時，先透過網路下載衛星資料</p>
+      <p class="big" style="font-size:72px">很快</p>
+      <p class="muted">在登山口有訊號時先定位一次，再開飛航模式</p>
+    </div>
+  </div>
+  <p style="margin:24px 0 0;font-size:26px" class="fragment">✅ 行動口訣：<span class="mark"><b>登山口 → 開 APP 定位成功 → 再開飛航模式</b></span></p>
+  <aside class="notes" data-sec="120">衛星定位不需網路也不需付費。但 A-GPS 能大幅縮短第一次定位的時間。</aside>
+</div>
+</section>
+<section data-section="定位" data-at="30" data-title="誤差與高度">
+<div class="pg" data-part="loc">
+  <div class="tag"><span class="dot"></span>定位 · <b>誤差與高度</b></div>
+  <h2>看懂兩個警戒值</h2>
+  <div class="cols3 grow">
+    <div class="card sec" style="text-align:center;display:flex;flex-direction:column;justify-content:center">
+      <p class="muted" style="margin:0">一般登山環境誤差</p>
+      <div class="big" style="font-size:96px">3–20<span style="font-size:40px">m</span></div>
+      <p style="margin:10px 0 0;font-size:20px">溪谷、密林、峭壁旁、雲層厚 → 誤差變大</p>
+    </div>
+    <div class="card sec fragment" style="text-align:center;display:flex;flex-direction:column;justify-content:center;border-top-color:var(--com)">
+      <p class="muted" style="margin:0">APP 顯示誤差超過</p>
+      <div class="big" style="font-size:96px;color:var(--com)">20<span style="font-size:40px">m</span></div>
+      <p style="margin:10px 0 0;font-size:20px">代表<b>定位不佳</b>，移到開闊處再等一下</p>
+    </div>
+    <div class="card sec fragment" style="text-align:center;display:flex;flex-direction:column;justify-content:center;border-top-color:var(--sur)">
+      <p class="muted" style="margin:0">與參考軌跡相差超過</p>
+      <div class="big" style="font-size:96px;color:var(--sur)">40<span style="font-size:40px">m</span></div>
+      <p style="margin:10px 0 0;font-size:20px">要<b>警覺可能走錯路</b></p>
+    </div>
+  </div>
+  <p class="fragment" style="margin:22px 0 0;font-size:23px">⛰️ <b>高度只供參考：</b>衛星算的是「橢球高」不是海拔；氣壓式高度計會受天氣影響，要在已知高度點校正。</p>
+</div>
+<aside class="notes" data-sec="120"></aside></section>
+<section data-section="定位" data-at="32" data-title="飛航模式要不要開？">
+<div class="pg vc" data-part="loc">
+  <div class="tag"><span class="dot"></span>定位 · <b>飛航模式</b></div>
+  <h2>飛航模式：開？還是關？</h2>
+  <div class="cols2 fit">
+    <div class="card sec">
+      <h3>✈️ 平常開著：為了省電</h3>
+      <p>手機搜尋不到基地台時，會加大功率而耗電。</p>
+      <p class="muted">衛星定位在飛航模式下仍可運作</p>
+    </div>
+    <div class="card sec" style="border-top-color:var(--com)">
+      <h3 style="color:var(--com)">📶 到稜線短暫關閉：留下紀錄</h3>
+      <p>手機與基地台的通聯（握手）紀錄，是搜救單位研判失聯者位置的重要線索。</p>
+      <p class="muted">在稜線、開闊處休息時關閉，回報留守人</p>
+    </div>
+  </div>
+  <div class="card fragment" style="margin-top:24px;background:#FFF7EC;display:flex;gap:20px;align-items:center">
+    <span style="font-size:48px">💬</span>
+    <p style="margin:0;font-size:24px">恢復訊號後，<b>簡訊通常最快送達</b>，LINE 等通訊軟體可能要等一段時間 → <span class="hl" style="color:var(--com)">緊急通報優先用簡訊</span>。</p>
+  </div>
+  <aside class="notes" data-sec="60">回扣南二段：7/24 那次短暫連上玉里基地台的紀錄，就是這種通聯紀錄。</aside>
+</div>
+</section>
+<section data-section="定位" data-at="33" data-title="定位原理小測驗">
+<div class="pg" data-part="loc">
+  <div class="tag"><span class="dot"></span>定位 · <b>即時小測驗</b></div>
+  <h2>小測驗：你記住了嗎？<small>全場一起喊答案，再點選確認</small></h2>
+  <div class="grow" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-content:start">
+    <div class="q" data-a="0" data-fb="衛星定位是單向接收，不需要基地台或網路。">
+      <div class="qt">Q1　在沒有基地台的山區，手機還能衛星定位嗎？</div>
+      <div class="opts"><button>能</button><button>不能</button><button>要先付費</button></div><div class="fb"></div></div>
+    <div class="q" data-a="2" data-fb="至少 4 顆衛星才能算出經度、緯度、高度。">
+      <div class="qt">Q2　至少要幾顆衛星，才能算出三維位置？</div>
+      <div class="opts"><button>2 顆</button><button>3 顆</button><button>4 顆</button><button>24 顆</button></div><div class="fb"></div></div>
+    <div class="q" data-a="1" data-fb="誤差超過 20 公尺代表定位不佳，移到開闊處等待。">
+      <div class="qt">Q3　登山 APP 顯示誤差 35 公尺，代表？</div>
+      <div class="opts"><button>很準，可以出發</button><button>定位不佳，移到開闊處</button><button>手機壞了</button></div><div class="fb"></div></div>
+    <div class="q" data-a="2" data-fb="恢復訊號時簡訊通常最快送達，緊急通報優先用簡訊。">
+      <div class="qt">Q4　恢復訊號時，哪種訊息通常最快送達？</div>
+      <div class="opts"><button>LINE</button><button>Email</button><button>簡訊</button></div><div class="fb"></div></div>
+  </div>
+  <p id="quizScore" class="muted" style="margin:10px 0 0;font-size:22px"></p>
+</div>
+<aside class="notes" data-sec="120"></aside></section>
+<section data-section="定位" data-at="35" data-title="四種手機定位方法">
+<div class="pg" data-part="loc">
+  <div class="tag"><span class="dot"></span>定位 · <b>手機定位方法</b></div>
+  <h2>四種把座標「讀出來」的方法<small>尋找迷途者，最重要的情資就是正確的 GPS 位置</small></h2>
+  <div class="cols2" style="grid-template-columns:1.1fr 1fr">
+    <div class="g2x2">
+      <div class="card sec"><h3>① Google 地圖</h3><p style="margin:0;font-size:20px">放到最大 → 按右下角定位鍵 → 長按藍色點約 2 秒 → 跳出經緯度</p></div>
+      <div class="card sec"><h3>② 座標 APP</h3><p style="margin:0;font-size:20px">Android：「台灣大地羅盤」等<br>iPhone：內建「指南針」</p></div>
+      <div class="card sec"><h3>③ LINE 位置分享</h3><p style="margin:0;font-size:20px">對話框選分享位置，送出前<b>多按幾次右上角定位鍵</b>讓位置更新</p></div>
+      <div class="card sec"><h3>④ 消防署簡訊定位</h3><p style="margin:0;font-size:20px">點選定位簡訊連結，位置經網路回傳；<b>定位需要時間累積精度</b></p></div>
+    </div>
+    <div class="picbox"><img class="pic wk-zoom" src="images/map_practice.jpg" alt="定位實作用地圖"></div>
+  </div>
+  <aside class="notes" data-sec="120">受理報案或與迷途者通話時，應盡量引導對方自行定位，並依「迷途者報案案情詢問表」取得所需資訊。下一頁開始實作。</aside>
+</div>
+</section>
+<section data-section="定位" data-at="37" data-title="實作①：讀出你的座標">
+<div class="pg" data-part="loc">
+  <div class="tag"><span class="dot"></span>定位 · <b>實作 ①</b></div>
+  <h2>實作①：用三種方法讀出你的座標</h2>
+  <div class="cols2" style="grid-template-columns:1.25fr 1fr">
+    <div class="steps">
+      <div class="step"><span class="num">1</span><div><b style="font-size:24px">Google 地圖</b><p>放到最大 → 右下角定位鍵 → 長按藍色點 2 秒 → 記下跳出的數字</p></div></div>
+      <div class="step"><span class="num">2</span><div><b style="font-size:24px">座標 APP</b><p>Android 開「台灣大地羅盤」；iPhone 滑到最左頁搜尋「指南針」→ 看畫面下方經緯度</p></div></div>
+      <div class="step"><span class="num">3</span><div><b style="font-size:24px">LINE 位置分享</b><p>傳給隔壁同學：先多按幾次右上角定位鍵，再送出</p></div></div>
+      <div class="step" style="background:#FFF7EC"><span class="num" style="background:var(--com)">？</span><div><b style="font-size:24px">比一比</b><p>三種方法讀到的數字一樣嗎？差多少公尺？格式一樣嗎？</p></div></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:20px;justify-content:center">
+      <div class="card"><p style="margin:0 0 8px;font-weight:900">✍️ 把你的座標寫在這裡</p>
+        <input class="f" placeholder="例：25.028803, 121.588231" id="myCoord">
+        <p style="margin:12px 0 0;font-size:19px" id="myCoordOut" class="muted">輸入後會判斷格式並提供地圖連結</p></div>
+      <div class="wk-timer" data-min="10" data-label="實作時間"></div>
+    </div>
+  </div>
+  <aside class="notes" data-sec="600">10 分鐘。巡場協助：iPhone 指南針若沒顯示座標，要到「設定 → 隱私權 → 定位服務 → 指南針」開啟「使用 App 期間」與「精確位置」。觀察誰的格式是度分秒、誰是十進位，下一頁換算。</aside>
+</div>
+</section>
+<section data-section="定位" data-at="47" data-title="座標格式換算">
+<div class="pg" data-part="loc">
+  <div class="tag"><span class="dot"></span>定位 · <b>座標格式</b></div>
+  <h2>同一個點，兩種寫法<small>十進位度（DD）↔ 度分秒（DMS）</small></h2>
+  <div class="cols2">
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div class="card sec">
+        <h3>換算規則</h3>
+        <p style="margin:0;font-size:22px">25.028803°<br>→ 小數 0.028803 × 60 = 1.72818 → <b>1′</b><br>→ 小數 0.72818 × 60 = 43.69 → <b>43.69″</b><br>= <span class="hl">N25° 1′ 43.69″</span></p>
+      </div>
+      <div class="card" style="background:#FFF7EC">
+        <p style="margin:0;font-size:21px">📞 報案時講清楚：<b>「北緯、東經」</b>＋<b>格式</b>＋<b>精度</b>。<br>例：「北緯 25.0288、東經 121.5882，誤差 10 公尺」</p>
+      </div>
+    </div>
+    <div class="card" id="conv">
+      <h3 style="color:var(--loc)">🧮 即時換算器</h3>
+      <p style="margin:0 0 6px;font-size:19px" class="muted">十進位（緯度, 經度）</p>
+      <input class="f" id="ddIn" value="25.028803, 121.588231">
+      <p style="margin:14px 0 6px;font-size:19px" class="muted">度分秒</p>
+      <input class="f" id="dmsIn" value="">
+      <p id="convMsg" style="font-size:19px;margin:14px 0 8px"></p>
+      <a id="convMap" class="btn" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none">在 Google 地圖開啟</a>
+    </div>
+  </div>
+  <aside class="notes" data-sec="360">兩個格式都正確，但混用會出事：把 25°01′43″ 誤寫成 25.0143 會差將近 1.6 公里。換算器任一欄輸入都會自動換算另一欄。</aside>
+</div>
+</section>
+<section data-section="定位" data-at="53" data-title="實作②：在地圖上標點">
+<div class="pg" data-part="loc">
+  <div class="tag"><span class="dot"></span>定位 · <b>實作 ②</b></div>
+  <h2>實作②：座標換算與標點</h2>
+  <div class="cols2" style="grid-template-columns:1.2fr 1fr">
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card sec" data-pt="25.028803,121.588231">
+        <h3>點 A · 攀岩路線上段</h3>
+        <p style="margin:0 0 8px;font-size:21px">N25.028803°　E121.588231° → 換成度分秒：</p>
+        <div style="display:flex;gap:10px"><input class="f pin" placeholder="N25° ?′ ?″" data-ans="lat"><input class="f pin" placeholder="E121° ?′ ?″" data-ans="lon"></div>
+        <p class="ptfb" style="margin:8px 0 0;font-size:19px"></p>
+      </div>
+      <div class="card sec" data-pt="25.020369,121.584400">
+        <h3>點 B · 拇指山下</h3>
+        <p style="margin:0 0 8px;font-size:21px">N25.020369°　E121.584400° → 換成度分秒：</p>
+        <div style="display:flex;gap:10px"><input class="f pin" placeholder="N25° ?′ ?″" data-ans="lat"><input class="f pin" placeholder="E121° ?′ ?″" data-ans="lon"></div>
+        <p class="ptfb" style="margin:8px 0 0;font-size:19px"></p>
+      </div>
+      <div style="display:flex;gap:14px;align-items:center">
+        <button class="btn fill" id="ptCheck">檢查答案</button>
+        <button class="btn" id="ptShow">公布答案</button>
+        <a class="btn" target="_blank" rel="noopener" style="text-decoration:none" href="https://www.google.com/maps?q=25.028803,121.588231">看點 A</a>
+        <a class="btn" target="_blank" rel="noopener" style="text-decoration:none" href="https://www.google.com/maps?q=25.020369,121.584400">看點 B</a>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;min-height:0">
+      <div class="picbox grow"><img class="pic wk-zoom" src="images/map_practice.jpg" alt="實作地圖"></div>
+      <p style="margin:0;font-size:20px">進階：用電腦版 Google 地圖、BaseCamp 或 Google Earth 標出 A、B 兩點。</p>
+      <div class="wk-timer" data-min="9" data-label="實作時間"></div>
+    </div>
+  </div>
+  <aside class="notes" data-sec="540">9 分鐘。準備筆電 4 台供分組操作電腦版 Google 地圖、BaseCamp、Google Earth。參考資源：行動網路涵蓋率 freqgis.ttida.org.tw、中華電信 coverage.cht.com.tw、地圖產生器 twmap.happyman.idv.tw。答案：A＝N25°1′43.69″ E121°35′17.63″；B＝N25°1′13.33″ E121°35′3.84″。</aside>
+</div>
+</section>
+<section data-section="定位" data-at="62" data-title="不可過度依賴電子設備">
+<div class="pg" data-part="loc">
+  <div class="tag"><span class="dot"></span>定位 · <b>備援觀念</b></div>
+  <div class="cols2" style="grid-template-columns:1fr 1fr;align-items:center">
+    <div>
+      <p style="font-family:var(--serif);font-size:52px;font-weight:900;line-height:1.35;margin:0">「登山不帶紙圖，<br>不是太自大，<br>就是有些無知。」</p>
+      <p class="muted" style="margin-top:14px">— 引自 2009 年版教材</p>
+      <p style="margin-top:26px">地形分析、尋路技巧、相對位置判斷；紙本地圖、指北針與高度計，仍然<b>無可取代</b>。</p>
+    </div>
+    <div class="card sec">
+      <h3>📱 讓手機撐久一點</h3>
+      <ul style="font-size:22px">
+        <li class="fragment">放在<b>透明防水袋</b></li>
+        <li class="fragment">攜帶<b>行動電源與充電線</b></li>
+        <li class="fragment">關閉省電模式，登山 APP 定位權限設為<b>「永遠」</b></li>
+        <li class="fragment">上山前<b>清出儲存空間</b>、下載離線地圖</li>
+        <li class="fragment">多人同行，<b>每支手機都是一層保險</b></li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes" data-sec="180">定位權限設為「永遠」是避免螢幕關閉後停止記錄軌跡。</aside>
+</div>
+</section>
+<section data-section="引起動機" data-at="65" data-title="休息 10 分鐘">
+<div class="pg bg" data-part="intro" style="background-image:url(images/bg_cliff.jpg)">
+  <div style="margin:auto 0">
+    <div class="kicker" style="font-size:30px;letter-spacing:.3em;color:#E8C99B;font-weight:700">BREAK</div>
+    <h1 style="font-size:100px;color:#fff;margin:14px 0 30px">休息 10 分鐘</h1>
+    <p style="font-size:26px;color:#E9EEEA;margin-bottom:26px">回來前請確認：手機電量 &gt; 50%、已登入 Google 帳號、已安裝 LINE</p>
+    <div class="wk-timer" data-min="10" data-label="休息"></div>
+  </div>
+</div>
+<aside class="notes" data-sec="600"></aside></section>
+<section data-section="通報" data-at="75" data-title="Part 2 通報">
+<div class="pg bg divider" data-part="com" style="background-image:url(images/bg_fog_two.jpg)">
+  <div style="margin:auto 0">
+    <div class="kicker">PART 2 · 75–105 分</div>
+    <h1>通報</h1>
+    <p style="font-size:34px;color:#E9EEEA;margin-top:20px">運用各種方式，把你的位置傳出去</p>
+  </div>
+</div>
+<aside class="notes" data-sec="150"></aside></section>
+<section data-section="通報" data-at="75" data-title="通訊設備金字塔">
+<div class="pg" data-part="com">
+  <div class="tag"><span class="dot"></span>通報 · <b>通訊設備的選擇</b></div>
+  <h2>依行程風險，疊加通訊設備</h2>
+  <div class="cols2" style="grid-template-columns:1.25fr 1fr">
+    <div class="picbox"><img class="pic wk-zoom" src="images/comm_pyramid.jpg" alt="登山通訊設備金字塔（依持有成本）"></div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <p style="margin:0;font-weight:900">🧭 你的行程是？</p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px" id="eqBtns">
+        <button class="btn" data-k="a">郊山一日、有收訊</button>
+        <button class="btn" data-k="b">隊伍拉長、隊員間要聯絡</button>
+        <button class="btn" data-k="c">多日縱走、大段無收訊</button>
+        <button class="btn" data-k="d">需要與外界語音詳談</button>
+      </div>
+      <div class="card sec grow" id="eqOut"><p class="muted" style="margin:0">點選左側情境，看建議的組合</p></div>
+    </div>
+  </div>
+  <aside class="notes" data-sec="150">金字塔由下到上依持有成本：手機（沿用原通訊費）→ 無線電對講機（購置成本低、無後續費用）→ 衛星電話（購置高、月租或儲值）→ 衛星通訊追蹤器 inReach（購置高、開通費、年費、月租與使用費）。無線電補充：VHF 戶外無障礙距離較遠、穿透性低；UHF 距離較近、穿透性強、適合室內。台灣合法範圍 VHF 144.000～146.000、UHF 430.000～432.000。</aside>
+</div>
+</section>
+<section data-section="通報" data-at="80" data-title="inReach 能做什麼">
+<div class="pg" data-part="com">
+  <div class="tag"><span class="dot"></span>通報 · <b>衛星通訊器</b></div>
+  <h2>衛星通訊器 inReach</h2>
+  <div class="picbox grow"><img class="pic wk-zoom" src="images/inreach.jpg" alt="衛星通訊器 inReach 的功能介紹"></div>
+  <aside class="notes" data-sec="120">示範分享頁：explore.garmin.com；義消 share.garmin.com/share/FNS2V；MoRE share.garmin.com/TH487。可現場打開分享頁讓學員看到軌跡。</aside>
+</div>
+</section>
+<section data-section="通報" data-at="82" data-title="SOS 通報與響應流程">
+<div class="pg" data-part="com">
+  <div class="tag"><span class="dot"></span>通報 · <b>SOS 流程</b></div>
+  <h2>按下 SOS 之後，訊息去了哪裡？<small>依序點選下方步驟，排出正確流程</small></h2>
+  <div class="cols2" style="grid-template-columns:1fr 1fr">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="pool" id="sosPool"></div>
+      <div style="display:flex;gap:12px;margin-top:6px">
+        <button class="btn" id="sosReset">重來</button>
+        <button class="btn" data-zoom="images/sos_flow.jpg">看原圖</button>
+      </div>
+    </div>
+    <div class="chain" id="sosChain"></div>
+  </div>
+  <aside class="notes" data-sec="240">正確流程：危難者按 SOS → 經衛星網路傳送 SOS 訊息 → Garmin 國際緊急回應中心（IERCC）接收 → 電話聯絡國內權責單位（陸地：消防署救災救護指揮中心；海域：海巡署）→ 同時通知緊急聯絡人並持續與求救者訊息同步 → 搜救出動。IERCC 24 小時全年無休專人應答。</aside>
+</div>
+</section>
+<section data-section="通報" data-at="86" data-title="inReach 真的有用嗎">
+<div class="pg vc" data-part="com">
+  <div class="tag"><span class="dot"></span>通報 · <b>實例分享</b></div>
+  <h2>inReach SOS 真的有效嗎？</h2>
+  <div class="cols2 fit">
+    <div class="card sec">
+      <span class="badge">3/26 · 安東軍縱走</span>
+      <p style="margin-top:16px">2 人隊伍經第二獵寮處<b>摔落骨折</b>，<span class="mark">現場無手機基地台訊號</span>。</p>
+      <p>以 inReach 觸發 SOS 並發送求救訊息 → 留守人轉報當地 119、Garmin IERCC 也轉知消防署 → <b>3/28 直升機後送就醫</b>。</p>
+    </div>
+    <div class="card sec">
+      <span class="badge">2/20 · 能高越嶺</span>
+      <p style="margin-top:16px">4 人隊伍於花蓮五甲崩壁附近<b>不慎墜落</b>，<span class="mark">現場有手機訊號</span>。</p>
+      <p>隊友向花蓮 119 求援並派出搜救隊；同時以 inReach 觸發 SOS → IERCC 緊急回應並轉知消防署。</p>
+    </div>
+  </div>
+  <p class="fragment" style="margin:24px 0 0;font-size:25px">👉 有手機訊號時也同時觸發 SOS——<b>多一條管道，就多一層保險</b>。</p>
+</div>
+<aside class="notes" data-sec="120"></aside></section>
+<section data-section="通報" data-at="88" data-title="119 報案 APP 與簡訊定位">
+<div class="pg vc" data-part="com">
+  <div class="tag"><span class="dot"></span>通報 · <b>官方管道</b></div>
+  <h2>官方通報管道</h2>
+  <div class="cols3">
+    <div class="card sec"><div style="font-size:54px">📲</div><h3>119 報案 APP</h3><p style="margin:0">手機 GPS、輸入電力座標或地圖點選定位；可<b>語音報案</b>（傳送座標到指揮中心）或<b>簡訊報案</b>（選案件類別、填待救與受傷人數）</p></div>
+    <div class="card sec"><div style="font-size:54px">✉️</div><h3>消防署簡訊定位</h3><p style="margin:0">消防機關傳定位簡訊，迷途者點連結，位置經網路回傳；<b>定位需要時間累積精度</b>，別點完就關</p></div>
+    <div class="card sec"><div style="font-size:54px">🟢</div><h3>縣市消防局輔助</h3><p style="margin:0">例：臺中市政府消防局會傳送定位連結，或邀請受困者加入 LINE 群組回傳位置</p></div>
+  </div>
+  <p style="margin:20px 0 0" class="fragment">✅ 今天回家前：<b>安裝 119 報案 APP、完成註冊</b>，不要等出事才下載。</p>
+</div>
+<aside class="notes" data-sec="120"></aside></section>
+<section data-section="通報" data-at="90" data-title="實作③：網頁定位">
+<div class="pg" data-part="com">
+  <div class="tag"><span class="dot"></span>通報 · <b>實作 ③</b></div>
+  <h2>實作③：網頁定位<small>透過簡訊傳送公開網頁連結，引導迷途者回報 GPS 位置</small></h2>
+  <div class="row grow" style="min-height:0">
+    <div style="flex:0 0 470px;display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;gap:20px">
+        <div style="text-align:center"><img class="qr" src="images/qr_findme.png" alt="findme.help QR code"><div style="font-weight:900;font-size:20px">findme.help</div></div>
+        <div style="text-align:center"><img class="qr" src="images/qr_findmesar.png" alt="findmesar.com QR code"><div style="font-weight:900;font-size:20px">findmesar.com</div></div>
+      </div>
+      <div class="steps">
+        <div class="step"><span class="num">1</span><p>掃描 QR code（或點簡訊連結）</p></div>
+        <div class="step"><span class="num">2</span><p>允許取用位置；findme.help 需再按「定位」</p></div>
+        <div class="step"><span class="num">3</span><p>等數秒 → 回報緯度、經度、海拔、精度（或截圖）</p></div>
+      </div>
+      <div class="wk-timer" data-min="6" data-label="實作時間"></div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;min-height:0">
+      <div class="picbox"><img class="pic wk-zoom" src="images/findme_1.jpg" alt="findme.help 定位前"></div>
+      <div class="picbox"><img class="pic wk-zoom" src="images/findme_2.jpg" alt="findme.help 定位結果"></div>
+      <div class="picbox"><img class="pic wk-zoom" src="images/findmesar.jpg" alt="findmesar.com 定位結果"></div>
+    </div>
+  </div>
+  <aside class="notes" data-sec="360">6 分鐘。兩個網頁都試，比較精度欄位。提醒學員：等待精度數值下降再回報，比一開啟就截圖準確。</aside>
+</div>
+</section>
+<section data-section="通報" data-at="96" data-title="救援簡訊範本">
+<div class="pg" data-part="com">
+  <div class="tag"><span class="dot"></span>通報 · <b>角色扮演</b></div>
+  <h2>救援簡訊範本：兩人一組演一次</h2>
+  <div class="cols2" style="grid-template-columns:1fr 1.15fr">
+    <div class="picbox"><img class="pic wk-zoom" src="images/sms_sample.jpg" alt="消防員傳給迷途者的簡訊範例"></div>
+    <div style="display:flex;flex-direction:column;gap:14px;min-height:0">
+      <pre class="copybox" id="smsTpl">迷途者您好，我是消防員，請依下列指引辦理：
+1. 加入救援 LINE 群組：（群組連結）
+2. 點開網頁 https://findmesar.com ，按「允許」，把經緯度數值或截圖傳回，原地待援。
+3. Android：Google 地圖放到最大，按右下角定位鍵，長按藍色點，把跳出的數值傳回，原地待援。
+4. iPhone：滑到最左頁搜尋「指南針」，開啟後把經緯度傳回，原地待援。</pre>
+      <div style="display:flex;gap:12px;align-items:center"><button class="btn fill" id="copySms">複製範本</button><span id="copyMsg" class="muted" style="font-size:18px"></span></div>
+      <div class="card" style="background:#FFF7EC;padding:16px 22px"><p style="margin:0;font-size:20px"><b>A 扮救援者</b>：把範本傳給 B。<b>B 扮迷途者</b>：照做並回傳座標。<br>交換角色再做一次，計時看誰回報最快、最準。</p></div>
+      <div class="wk-timer" data-min="4" data-label="角色扮演"></div>
+    </div>
+  </div>
+</div>
+<aside class="notes" data-sec="240"></aside></section>
+<section data-section="通報" data-at="100" data-title="尋找手機">
+<div class="pg" data-part="com">
+  <div class="tag"><span class="dot"></span>通報 · <b>尋找手機</b></div>
+  <h2>尋找手機：讓親友找得到你的手機<small>需要迷途者事先開啟功能，並由信任的親友持有帳號資訊</small></h2>
+  <div class="cols2" style="grid-template-columns:1fr 1fr 1.1fr">
+    <div class="picbox"><img class="pic wk-zoom" src="images/apple_find.jpg" alt="Apple 尋找"></div>
+    <div class="picbox"><img class="pic wk-zoom" src="images/google_find.jpg" alt="Google 尋找我的裝置"></div>
+    <div class="card sec" style="display:flex;flex-direction:column;justify-content:center">
+      <h3>現在就檢查</h3>
+      <ul style="font-size:22px">
+        <li><b>iPhone</b>：設定 → 你的名字 →「尋找」→ 開啟「尋找我的 iPhone」</li>
+        <li><b>Android</b>：設定 → Google →「尋找我的裝置」開啟</li>
+        <li>出發前讓<b>留守人</b>知道如何協助查詢</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes" data-sec="60">開啟 Apple「尋找」或 Google「尋找我的裝置」APP／網頁，輸入帳號密碼後可取得手機目前座標或地圖位置。提醒：帳號密碼屬敏感資訊，只交給真正信任的留守人。</aside>
+</div>
+</section>
+<section data-section="通報" data-at="101" data-title="實作④：即時位置分享">
+<div class="pg" data-part="com">
+  <div class="tag"><span class="dot"></span>通報 · <b>實作 ④</b></div>
+  <h2>實作④：出發前設定 Google 地圖即時位置分享</h2>
+  <div class="row grow" style="min-height:0">
+    <div style="flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;min-height:0">
+      <div style="display:flex;flex-direction:column;min-height:0"><div class="picbox grow"><img class="pic wk-zoom" src="images/share_1.jpg" alt="Google 地圖首頁"></div><p style="margin:8px 0 0;font-size:20px;text-align:center"><b>1</b> 點右上角帳號頭像</p></div>
+      <div style="display:flex;flex-direction:column;min-height:0"><div class="picbox grow"><img class="pic wk-zoom" src="images/share_2.jpg" alt="帳號選單中的位置資訊分享"></div><p style="margin:8px 0 0;font-size:20px;text-align:center"><b>2</b> 選「位置資訊分享」</p></div>
+      <div style="display:flex;flex-direction:column;min-height:0"><div class="picbox grow"><img class="pic wk-zoom" src="images/share_3.jpg" alt="設定分享時間與對象"></div><p style="margin:8px 0 0;font-size:20px;text-align:center"><b>3</b> 設定時間與對象</p></div>
+    </div>
+    <div style="flex:0 0 440px;display:flex;flex-direction:column;gap:16px;justify-content:center">
+      <div class="card sec"><p style="margin:0;font-size:21px">分享給<b>隔壁同學 1 小時</b>，<br>請對方確認看得到你的位置。</p><p class="muted" style="margin:10px 0 0;font-size:18px">課後記得關閉分享</p></div>
+      <div class="wk-timer" data-min="3" data-label="實作時間"></div>
+    </div>
+  </div>
+  <aside class="notes" data-sec="180">分享時間可選 1 小時或「直到你關閉這項設定」；對象可以是留守人或隊友，經 LINE、簡訊等傳送。截圖中的帳號與聯絡人資訊已模糊處理。</aside>
+</div>
+</section>
+<section data-section="通報" data-at="104" data-title="鵝尾山案例">
+<div class="pg" data-part="com">
+  <div class="tag"><span class="dot"></span>通報 · <b>鵝尾山案例</b></div>
+  <h2>留守人手機上看到的即時位置</h2>
+  <div class="cols2" style="grid-template-columns:1.8fr 1fr">
+    <div class="picbox"><img class="pic wk-zoom" src="images/ewei_earth.jpg" alt="鵝尾山案例：Google Earth 軌跡"></div>
+    <div class="picbox"><img class="pic wk-zoom" src="images/ewei_phone.jpg" alt="鵝尾山案例：留守人手機畫面"></div>
+  </div>
+  <p style="margin:18px 0 0;font-size:24px">📌 小結：把<b>最可靠的一種</b>當主要通報方式，其他當備援。</p>
+</div>
+<aside class="notes" data-sec="60"></aside></section>
+<section data-section="自救" data-at="105" data-title="Part 3 自救">
+<div class="pg bg divider" data-part="sur" style="background-image:url(images/bg_tunnel.jpg)">
+  <div style="margin:auto 0">
+    <div class="kicker">PART 3 · 105–125 分</div>
+    <h1>自救</h1>
+    <p style="font-size:34px;color:#E9EEEA;margin-top:20px">運用各種方式，活下去</p>
+  </div>
+</div>
+<aside class="notes" data-sec="60"></aside></section>
+<section id="poll" data-section="自救" data-at="105" data-title="先猜再看：333 原則">
+<div class="pg" data-part="sur">
+  <div class="tag"><span class="dot"></span>自救 · <b>先猜再看</b></div>
+  <h2>哪一個最快危及生命？<small>用手機投票，等一下翻牌揭曉</small></h2>
+  <div class="row grow" style="align-items:center">
+    <div id="poll-options" style="flex:1;display:flex;flex-direction:column;gap:16px" data-prevent-swipe></div>
+    <div style="flex:0 0 300px;display:flex;flex-direction:column;gap:14px;align-items:center">
+      <div class="qr-box" id="qr-poll"></div>
+      <p class="muted" style="margin:0;font-size:18px;text-align:center">已投票 <b id="poll-total">0</b> 人（可改票）</p>
+      <button class="btn wk-ui" id="poll-reveal">揭曉答案</button>
+    </div>
+  </div>
+  <aside class="notes" data-sec="60">先別翻牌，請大家投票：3 週未進食、3 天沒喝水、3 小時失溫，哪一個最快危及生命？看完票數後按「揭曉答案」，再到下一頁翻牌說明。</aside>
+</div>
+</section>
+<section data-section="自救" data-at="107" data-title="333 原則">
+<div class="pg" data-part="sur">
+  <div class="tag"><span class="dot"></span>自救 · <b>333 原則</b></div>
+  <h2>333 原則：哪一個最快要命？<small>先猜，再點卡片翻面</small></h2>
+  <div class="cols3 grow">
+    <div class="flip" style="--sec:#7A8C82"><div class="in">
+      <div class="fa" style="align-items:center;text-align:center"><div style="font-size:70px">🍙</div><p style="font-size:34px;font-weight:900;margin:10px 0">未進食</p><span class="hint">點擊翻面</span></div>
+      <div class="fb" style="align-items:center;text-align:center"><div class="big" style="color:#fff">3 週</div><p>未進食</p></div>
+    </div></div>
+    <div class="flip" style="--sec:var(--loc)"><div class="in">
+      <div class="fa" style="align-items:center;text-align:center"><div style="font-size:70px">💧</div><p style="font-size:34px;font-weight:900;margin:10px 0">沒喝水</p><span class="hint">點擊翻面</span></div>
+      <div class="fb" style="align-items:center;text-align:center"><div class="big" style="color:#fff">3 天</div><p>沒喝水</p></div>
+    </div></div>
+    <div class="flip" style="--sec:var(--sur)"><div class="in">
+      <div class="fa" style="align-items:center;text-align:center"><div style="font-size:70px">🥶</div><p style="font-size:34px;font-weight:900;margin:10px 0">失溫</p><span class="hint">點擊翻面</span></div>
+      <div class="fb" style="align-items:center;text-align:center"><div class="big" style="color:#fff">3 小時</div><p><b>風險最高、發生最快</b><br>自救第一優先：保暖</p></div>
+    </div></div>
+  </div>
+  <p class="muted" style="margin:16px 0 0;font-size:19px">實際時間依環境與個人狀況差異很大。</p>
+  <aside class="notes" data-sec="120">讓學員先猜哪一個最快。失溫風險最高、發生最快，所以自救的第一優先是保暖。</aside>
+</div>
+</section>
+<section data-section="自救" data-at="109" data-title="失溫：判斷與處置">
+<div class="pg" data-part="sur">
+  <div class="tag"><span class="dot"></span>自救 · <b>失溫</b></div>
+  <div class="cols2" style="grid-template-columns:.9fr 1.3fr">
+    <div class="picbox"><img class="pic wk-zoom" src="images/rule333.jpg" alt="333 原則與失溫的判斷、處置"></div>
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <h2 style="margin:0">失溫：先分辨，再處置</h2>
+      <div class="card sec">
+        <h3>🔍 如何判斷：容易混淆的狀況</h3>
+        <p style="margin:0">低體溫的表現，可能和 <b>高山症、頭部外傷（TBI）、喝醉酒、低血糖</b> 相似，需要一起區辨。</p>
+      </div>
+      <div class="card sec">
+        <h3>🧯 如何處置</h3>
+        <ol style="font-size:22px;margin:0">
+          <li class="fragment">換上<b>乾燥衣物</b></li>
+          <li class="fragment">適時補充<b>熱水</b></li>
+          <li class="fragment"><b>熱水袋</b>增溫（定期換位置，預防燙傷）</li>
+          <li class="fragment"><b>阻絕熱交換</b>（睡袋、保暖包覆）</li>
+          <li class="fragment">移到<b>溫暖的環境</b></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="notes" data-sec="300"></aside></section>
+<section data-section="自救" data-at="114" data-title="失溫等級判斷">
+<div class="pg" data-part="sur">
+  <div class="tag"><span class="dot"></span>自救 · <b>失溫等級</b></div>
+  <h2>失溫等級判斷<small>拖動滑桿，看中心溫度對應的狀態</small></h2>
+  <div class="cols2" style="grid-template-columns:1.25fr 1fr">
+    <div style="display:flex;flex-direction:column;gap:22px;justify-content:center">
+      <div style="display:flex;align-items:baseline;gap:20px"><div class="big" id="hyT" style="font-size:110px">36.5</div><span style="font-size:40px;font-weight:900;color:var(--sur)">°C</span></div>
+      <input type="range" data-prevent-swipe id="hyR" min="10" max="37" step="0.1" value="36.5">
+      <div style="display:flex;justify-content:space-between;font-size:16px" class="muted"><span>10°C</span><span>13.7</span><span>24</span><span>28</span><span>32</span><span>35</span><span>37°C</span></div>
+      <div class="card sec" id="hyBox" style="min-height:170px"></div>
+    </div>
+    <div class="picbox"><img class="pic wk-zoom" src="images/hypo_level.jpg" alt="失溫等級判斷表"></div>
+  </div>
+  <aside class="notes" data-sec="360">依原簡報分級：一級 35～32°C、二級 32～28°C、三級 28～24°C、四級 24～13.7°C、五級 &lt;13.7°C。進入第二級失溫，死亡率大幅提高。重點：「停止顫抖」不是變好，而是惡化。</aside>
+</div>
+</section>
+<section data-section="自救" data-at="120" data-title="讓自己留在好位置">
+<div class="pg" data-part="sur">
+  <div class="tag"><span class="dot"></span>自救 · <b>關鍵原則</b></div>
+  <h2>讓自己留在「好位置」</h2>
+  <div class="cols3 grow">
+    <div class="card sec" style="text-align:center;display:flex;flex-direction:column;justify-content:center"><div style="font-size:84px">👀</div><h3>容易被找到</h3><p style="margin:0">開闊、顯眼，搜救隊與直升機看得到</p></div>
+    <div class="card sec" style="text-align:center;display:flex;flex-direction:column;justify-content:center;border-top-color:var(--com)"><div style="font-size:84px">📶</div><h3 style="color:var(--com)">能收到訊號</h3><p style="margin:0">稜線、開闊處較有機會連上基地台或衛星</p></div>
+    <div class="card sec" style="text-align:center;display:flex;flex-direction:column;justify-content:center;border-top-color:var(--loc)"><div style="font-size:84px">⛺</div><h3 style="color:var(--loc)">能躲避風雨</h3><p style="margin:0">搭庇護所、避風避雨、保持體溫</p></div>
+  </div>
+  <div class="card fragment" style="margin-top:22px;background:#FFF7EC"><p style="margin:0;font-size:22px">自救工具箱：<b>野外求生</b>（備齊裝備、節省體力、保持冷靜）· <b>生火</b>（保暖、烹煮、淨化水源）· <b>庇護所</b> · <b>觀察氣象</b>（雲層、風向風速、氣溫）· <b>野外救護</b>（處理傷口、固定外傷、評估狀況、尋求協助）</p></div>
+  <aside class="notes" data-sec="300">三個條件有時互相衝突（稜線有訊號但風大），要權衡：先確保不失溫，再短暫移動到有訊號處回報。</aside>
+</div>
+</section>
+<section data-section="喚起行動" data-at="125" data-title="實作⑤：綜合演練">
+<div class="pg" data-part="act">
+  <div class="tag"><span class="dot"></span>喚起行動 · <b>實作 ⑤</b></div>
+  <h2>實作⑤：綜合演練——定位、通報、自救一次走完</h2>
+  <div class="cols2" style="grid-template-columns:1.25fr 1fr">
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card" id="scnCard" style="background:var(--forest);color:#fff;flex:1;display:flex;flex-direction:column;justify-content:center;min-height:250px">
+        <p class="muted" style="color:#C9D4CC;margin:0 0 10px;font-size:20px" id="scnTag">每組抽一張情境卡</p>
+        <div class="scn" id="scnText">按下「抽情境卡」開始</div>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap" id="scnBtns">
+        <button class="btn fill" id="scnDraw">🎲 抽情境卡</button>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="step"><span class="num" style="background:var(--loc)">定</span><div><b>定位</b><p>用兩種方法讀出座標，並換成另一種格式</p></div></div>
+      <div class="step"><span class="num" style="background:var(--com)">報</span><div><b>通報</b><p>寫出給 119／留守人的簡訊：誰、在哪（座標＋精度）、發生什麼、傷況、電量與裝備</p></div></div>
+      <div class="step"><span class="num" style="background:var(--sur)">救</span><div><b>自救</b><p>列出等待救援期間的 3 個立即行動</p></div></div>
+      <div class="wk-timer" data-min="12" data-label="分組演練"></div>
+    </div>
+  </div>
+  <aside class="notes" data-sec="1080">分組 12 分鐘＋每組 1 分鐘分享（約 6 分鐘）。評分重點：定位至少兩種方法且格式正確；簡訊有座標與精度；自救以保暖優先、留在好位置。</aside>
+</div>
+</section>
+<section data-section="喚起行動" data-at="143" data-title="行前檢核清單">
+<div class="pg" data-part="act">
+  <div class="tag"><span class="dot"></span>喚起行動 · <b>帶回去做</b></div>
+  <h2>下次出發前，打勾才出門<small>勾選狀態會記在這台電腦的瀏覽器裡</small></h2>
+  <div class="chk grow" id="chk"></div>
+  <p id="chkCount" style="margin:14px 0 0;font-size:22px;font-weight:700"></p>
+</div>
+<aside class="notes" data-sec="240"></aside></section>
+<section data-section="喚起行動" data-at="147" data-title="帶走一句話">
+<div class="pg dark" data-part="act">
+  <div style="margin:auto 0;max-width:1300px">
+    <div style="display:flex;gap:16px;margin-bottom:40px">
+      <span class="badge" style="background:var(--loc)">定位</span><span class="badge" style="background:var(--com)">通報</span><span class="badge" style="background:var(--sur)">自救</span>
+    </div>
+    <p style="font-family:var(--serif);font-size:72px;font-weight:900;line-height:1.35;margin:0;color:#fff">沒有一個方法是保證有用的。</p>
+    <p style="font-family:var(--serif);font-size:56px;font-weight:900;line-height:1.4;margin:20px 0 0;color:#E8C99B">多重準備、靈活運用，<br>才能提高生存機率。</p>
+  </div>
+</div>
+<aside class="notes" data-sec="120"></aside></section>
+<section data-section="喚起行動" data-at="149" data-title="Thank you / Q&A">
+<div class="pg bg" data-part="act" style="background-image:url(images/bg_fog_wide.jpg)">
+  <div style="margin:auto 0">
+    <h1 style="font-size:120px;color:#fff">Thank you</h1>
+    <p style="font-size:36px;color:#E9EEEA;margin-top:20px">Q &amp; A · 平安上山，平安回家</p>
+  </div>
+</div>
+<aside class="notes" data-sec="60"></aside></section>
+
+</div></div>
+<div id="qa-overlay"></div>
+<aside id="qa-sidebar" data-prevent-swipe>
+  <button id="qa-handle" aria-label="開關提問牆"><span style="font-size:19px">🙋</span><span style="writing-mode:vertical-rl;letter-spacing:3px;font-weight:700;font-size:14px">提問牆</span><span class="qh-dot"></span></button>
+  <div class="qa-inner">
+    <div style="font-size:19px;font-weight:700;margin-bottom:16px">🙋 匿名提問牆 <span class="live">LIVE</span></div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+      <input id="qa-input" class="ui-input" type="text" placeholder="輸入問題，按 Enter…" maxlength="80">
+      <button id="qa-btn" class="ui-btn">送出提問</button>
+    </div>
+    <div id="qa-list" style="flex:1;overflow-y:auto;padding-right:4px"></div>
+  </div>
+</aside>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script src="kit/workshop-kit.js"></script>
+<script>
+
+  // === 響應式：手機直式＝單欄頁內捲動；其餘＝1600×900 固定畫布 ===
+  function deckSize(){
+    const portrait = window.matchMedia('(orientation: portrait)').matches;
+    const w = window.innerWidth, h = window.innerHeight;
+    if (portrait && w < 760) return { width:640, height:Math.max(1000, Math.round(640*h/Math.max(1,w))), margin:0.01, mobile:true, center:false, touch:false };
+    return { width:1600, height:900, margin:0.02, mobile:false, center:false, touch:true };
+  }
+  function applyResponsive(){
+    const n = deckSize();
+    document.body.classList.toggle('mobile', n.mobile);
+    Reveal.configure({ width:n.width, height:n.height, margin:n.margin, center:n.center, touch:n.touch });
+    Reveal.layout();
+  }
+  const ds = deckSize();
+  document.body.classList.toggle('mobile', ds.mobile);
+  Reveal.initialize({
+    hash:true, transition: WK.shot ? 'none' : 'slide', backgroundTransition:'fade',
+    fragments: !WK.clean, center:ds.center, touch:ds.touch, progress:true, controls:true, slideNumber:'c/t',
+    width:ds.width, height:ds.height, margin:ds.margin, minScale:0.2, maxScale:2,
+    view:null, scrollActivationWidth:null, plugins:[RevealNotes]
+  });
+  Reveal.on('ready', applyResponsive);
+  window.addEventListener('load', applyResponsive);
+  let _rz; window.addEventListener('resize', ()=>{ clearTimeout(_rz); _rz=setTimeout(applyResponsive,180); });
+  window.addEventListener('orientationchange', ()=>setTimeout(applyResponsive,250));
+  Reveal.on('slidechanged', e=>{ if(e.currentSlide) e.currentSlide.scrollTop=0; });
+  WK.init({ total: 150 });
+  document.querySelectorAll('[data-prevent-swipe]').forEach(el=>['touchstart','touchmove','touchend'].forEach(ev=>el.addEventListener(ev,e=>e.stopPropagation(),{passive:false})));
+
+(function(){
+const SEC={intro:'#1F3B2D',loc:'#2E7D9A',com:'#D9822B',sur:'#C0392B',act:'#1F3B2D'};
+const SECNAME={intro:'引起動機',loc:'定位',com:'通報',sur:'自救',act:'喚起行動'};
+const TOTAL=150;
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+/* ---------- agenda ---------- */
+(function(){const A=[[0,10,'intro','開場','講師介紹、問題引入'],[10,25,'intro','案例與三角形','南二段事件、三個誤解'],[25,35,'loc','衛星定位原理','GNSS、冷熱開機、誤差、飛航模式'],[35,65,'loc','定位實作','實作①讀座標　實作②換算標點'],[65,75,'','休息',''],[75,105,'com','通報實作','設備選擇、SOS 流程、實作③網頁定位、實作④即時分享'],[105,125,'sur','自救','333 原則、失溫判斷與分級'],[125,145,'act','綜合演練','實作⑤情境卡全流程'],[145,150,'act','總結','行前檢核、帶走一句話、Q&A']];
+ const box=document.getElementById('agenda');
+ A.forEach(a=>{const r=document.createElement('div');const c=a[2]?SEC[a[2]]:'#9AA59F';
+  r.style.cssText='display:flex;align-items:center;gap:20px';
+  r.innerHTML='<span style="font-family:ui-monospace,monospace;font-size:20px;width:110px;color:#5F6B64">'+a[0]+'–'+a[1]+'</span><div style="height:44px;border-radius:10px;background:'+c+';width:'+((a[1]-a[0])*9+40)+'px;flex:none"></div><span style="font-size:24px;font-weight:900">'+a[3]+'</span><span style="font-size:20px;color:#5F6B64">'+a[4]+'</span>';
+  box.appendChild(r)})})();
+
+/* ---------- triangle ---------- */
+const TRI={loc:['定位','標定自己的所在地','#2E7D9A',['手機（定位功能／GPS）','衛星通訊裝置（例如 inReach）','個人定位信標（PLB）','紙本地圖','指北針']],
+ com:['通報','把位置傳出去','#D9822B',['手機（通話、訊息）','無線電對講機','衛星電話','衛星通訊裝置（例如 inReach）','隊友協助']],
+ sur:['自救','活下去，等待救援','#C0392B',['野外求生：備齊裝備、節省體力、保持冷靜','生火：保暖、烹煮食物、淨化水源','庇護所：避風避雨、保持體溫、安全隱蔽','觀察氣象：雲層、風向風速、氣溫變化','野外救護：處理傷口、固定外傷、評估狀況']]};
+document.querySelectorAll('#tri .v').forEach(g=>g.addEventListener('click',()=>{
+  document.querySelectorAll('#tri .v').forEach(x=>x.classList.remove('sel'));g.classList.add('sel');
+  const d=TRI[g.dataset.k];const box=document.getElementById('triInfo');
+  box.style.borderTop='8px solid '+d[2];
+  box.innerHTML='<h3 style="color:'+d[2]+';font-size:40px">'+d[0]+'</h3><p style="margin:0 0 12px;font-weight:700">目的：'+d[1]+'</p><ul style="font-size:22px">'+d[3].map(x=>'<li>'+x+'</li>').join('')+'</ul><p style="margin-top:14px"><button class="btn" data-zoom="images/triangle_info.jpg">看原簡報三角形全圖</button></p>'}));
+
+/* ---------- flip ---------- */
+document.querySelectorAll('.flip').forEach(f=>f.addEventListener('click',()=>f.classList.toggle('on')));
+
+/* ---------- quiz ---------- */
+let qRight=0,qDone=0;
+document.querySelectorAll('.q').forEach(q=>{const bs=[...q.querySelectorAll('.opts button')];let done=false;
+  bs.forEach((b,i)=>b.onclick=()=>{if(done)return;done=true;qDone++;const a=+q.dataset.a;
+   bs[a].classList.add('right');if(i!==a)b.classList.add('wrong');else qRight++;
+   q.querySelector('.fb').innerHTML=(i===a?'<span class="ok">✔ 答對了！</span> ':'<span class="bad">✘ 再想想：</span> ')+q.dataset.fb;
+   document.getElementById('quizScore').textContent='已作答 '+qDone+' / 4，答對 '+qRight+' 題'})});
+
+/* ---------- coordinates ---------- */
+function toDMS(v,pos,neg){const h=v<0?neg:pos;v=Math.abs(v);let d=Math.floor(v),mf=(v-d)*60,m=Math.floor(mf),s=+((mf-m)*60).toFixed(2);if(s>=60){s=0;m++}if(m>=60){m=0;d++}return h+d+'° '+m+'′ '+s.toFixed(2)+'″'}
+function parseDD(t){const m=t.replace(/[NnEe°]/g,' ').match(/(-?\d+(?:\.\d+)?)\s*[,，\s]\s*(-?\d+(?:\.\d+)?)/);if(!m)return null;const a=+m[1],b=+m[2];if(Math.abs(a)>90||Math.abs(b)>180)return null;return [a,b]}
+function parseOneDMS(t){const n=t.match(/\d+(?:\.\d+)?/g);if(!n||n.length<2)return null;return (+n[0])+(+n[1])/60+((+n[2])||0)/3600}
+function parseDMS(t){const parts=t.split(/[,，]|(?=[EeＥ東])/).filter(x=>/\d/.test(x));if(parts.length<2)return null;const a=parseOneDMS(parts[0]),b=parseOneDMS(parts[1]);if(a==null||b==null)return null;return [a,b]}
+const ddIn=document.getElementById('ddIn'),dmsIn=document.getElementById('dmsIn'),cMsg=document.getElementById('convMsg'),cMap=document.getElementById('convMap');
+function fromDD(){const p=parseDD(ddIn.value);if(!p){cMsg.innerHTML='<span class="bad">請輸入「緯度, 經度」，例如 25.0288, 121.5882</span>';return}
+  dmsIn.value=toDMS(p[0],'N','S')+', '+toDMS(p[1],'E','W');cMsg.innerHTML='<span class="ok">✔ 已換算</span>　口語：北緯 '+p[0]+'、東經 '+p[1];cMap.href='https://www.google.com/maps?q='+p[0]+','+p[1]}
+function fromDMS(){const p=parseDMS(dmsIn.value);if(!p){cMsg.innerHTML='<span class="bad">格式例：N25° 1′ 43.69″, E121° 35′ 17.63″</span>';return}
+  ddIn.value=p[0].toFixed(6)+', '+p[1].toFixed(6);cMsg.innerHTML='<span class="ok">✔ 已換算</span>';cMap.href='https://www.google.com/maps?q='+p[0].toFixed(6)+','+p[1].toFixed(6)}
+ddIn.addEventListener('input',fromDD);dmsIn.addEventListener('input',fromDMS);fromDD();
+const my=document.getElementById('myCoord'),myO=document.getElementById('myCoordOut');
+my.addEventListener('input',()=>{let p=parseDD(my.value),f='十進位度（DD）';if(!p||/[°′'″"]/.test(my.value)){const q=parseDMS(my.value);if(q){p=q;f='度分秒（DMS）'}}
+  if(!p){myO.innerHTML='<span class="muted">輸入「緯度, 經度」</span>';return}
+  myO.innerHTML='<span class="ok">✔ 格式：'+f+'</span><br>DD：'+p[0].toFixed(6)+', '+p[1].toFixed(6)+'<br>DMS：'+toDMS(p[0],'N','S')+', '+toDMS(p[1],'E','W')+'<br><a target="_blank" rel="noopener" href="https://www.google.com/maps?q='+p[0]+','+p[1]+'">在 Google 地圖開啟</a>'});
+function checkPts(reveal){document.querySelectorAll('[data-pt]').forEach(c=>{const [la,lo]=c.dataset.pt.split(',').map(Number);const ins=c.querySelectorAll('.pin');const fb=c.querySelector('.ptfb');
+  const ans=[toDMS(la,'N','S'),toDMS(lo,'E','W')];
+  if(reveal){fb.innerHTML='答案：<b>'+ans[0]+'　'+ans[1]+'</b>';return}
+  const ok=[la,lo].map((v,i)=>{const g=parseOneDMS(ins[i].value);return g!=null&&Math.abs(g-v)<0.5/3600});
+  ins.forEach((x,i)=>x.style.borderColor=ok[i]?'#2F8F5B':'#C0392B');
+  fb.innerHTML=ok.every(Boolean)?'<span class="ok">✔ 全對！誤差在 0.5 秒內</span>':'<span class="bad">還沒對：記得分、秒都是 ×60</span>'})}
+document.getElementById('ptCheck').onclick=()=>checkPts(false);document.getElementById('ptShow').onclick=()=>checkPts(true);
+
+/* ---------- equipment ---------- */
+const EQ={a:['郊山一日、有收訊',['📱 手機＋行動電源（主要）','📍 Google 地圖即時位置分享給留守人','🗺️ 離線地圖、紙圖與指北針（備援）','👤 出發前告知留守人行程']],
+ b:['隊伍拉長、隊員間要聯絡',['📱 每人手機都是一層保險','📻 無線電對講機：購置成本低、無後續費用','🔊 VHF 戶外距離較遠；UHF 穿透性較強','🗣️ 事先約定頻道與通聯時間']],
+ c:['多日縱走、大段無收訊（例：南二段）',['🛰️ 衛星通訊器（inReach）：SOS＋雙向訊息＋軌跡分享','📱 手機只當零星收訊時的備援','📶 稜線、開闊處短暫關飛航模式留下通聯紀錄','👤 與留守人約定回報時間與停損點']],
+ d:['需要與外界語音詳談',['☎️ 衛星電話：可直接通話','💰 購置成本高，後續有月租或儲值費用','🛰️ 可搭配 inReach 做軌跡與 SOS','📱 手機仍是第一線工具']]};
+document.querySelectorAll('#eqBtns button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#eqBtns button').forEach(x=>x.classList.remove('fill'));b.classList.add('fill');
+  const d=EQ[b.dataset.k];document.getElementById('eqOut').innerHTML='<h3>'+d[0]+'</h3><ul style="font-size:22px">'+d[1].map(x=>'<li style="list-style:none;margin-left:-1.2em">'+x+'</li>').join('')+'</ul><p class="muted" style="margin:10px 0 0;font-size:18px">原則：最可靠的一種當主要，其他當備援</p>'});
+
+/* ---------- SOS order game ---------- */
+const SOS=['危難者按下 inReach 的 SOS','經衛星網路傳送 SOS 訊息','Garmin 國際緊急回應中心（IERCC）接收','IERCC 電話聯絡國內權責單位：消防署（陸地）／海巡署（海域）','同時通知緊急聯絡人，並持續與求救者訊息同步','搜救出動'];
+let sosStep=0;
+function sosInit(){sosStep=0;const pool=document.getElementById('sosPool'),ch=document.getElementById('sosChain');pool.innerHTML='';ch.innerHTML='';
+  SOS.forEach((t,i)=>{const c=document.createElement('div');c.className='c';c.innerHTML='<span class="num">'+(i+1)+'</span><span class="muted">？</span>';ch.appendChild(c)});
+  SOS.map((t,i)=>[t,i]).sort(()=>Math.random()-.5).forEach(([t,i])=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{
+    const slot=ch.children[sosStep];
+    if(i===sosStep){b.classList.add('used');slot.classList.add('good');slot.classList.remove('no');slot.innerHTML='<span class="num" style="background:var(--ok)">'+(i+1)+'</span>'+t;sosStep++;
+      if(sosStep===SOS.length){const d=document.createElement('div');d.className='ok';d.style.fontSize='22px';d.textContent='🎉 完成！IERCC 24 小時全年無休專人應答。';ch.appendChild(d)}}
+    else{slot.classList.add('no');setTimeout(()=>slot.classList.remove('no'),500)}};pool.appendChild(b)})}
+document.getElementById('sosReset').onclick=sosInit;sosInit();
+
+/* ---------- copy SMS ---------- */
+document.getElementById('copySms').onclick=()=>{const t=document.getElementById('smsTpl').textContent,m=document.getElementById('copyMsg');
+  (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>m.textContent='✔ 已複製',()=>{const r=document.createRange();r.selectNodeContents(document.getElementById('smsTpl'));const s=getSelection();s.removeAllRanges();s.addRange(r);m.textContent='已選取，請按 Ctrl+C'})};
+
+/* ---------- hypothermia slider ---------- */
+const HY=[[35,99,'正常／未達失溫','#2F8F5B','中心溫度 35°C 以上。仍要注意保暖、補充熱量，預防進入失溫。'],
+ [32,35,'一級失溫','#D9822B','意識清楚、顫抖、身體狀態 OK，還可以照顧自己。<br>→ 立刻換乾衣、熱水、阻絕熱交換。'],
+ [28,32,'二級失溫 ☠','#C0392B','意識模糊、<b>停止顫抖</b>。進入第二級失溫，死亡率大幅提高！<br>→ 停止顫抖不是好轉，是惡化。'],
+ [24,28,'三級失溫 ☠','#A02A1F','失去意識。'],
+ [13.7,24,'四級失溫 ☠','#7A1F17','外觀已呈現死亡狀態。'],
+ [0,13.7,'五級失溫 ☠','#4A1410','必定死亡（依原簡報分級）。']];
+const hyR=document.getElementById('hyR');
+function hy(){const v=+hyR.value;document.getElementById('hyT').textContent=v.toFixed(1);const l=HY.find(h=>v>=h[0]&&v<h[1])||HY[0];
+  const b=document.getElementById('hyBox');b.style.borderTopColor=l[3];b.innerHTML='<h3 style="color:'+l[3]+';font-size:36px">'+l[2]+'</h3><p style="margin:0">'+l[4]+'</p>';document.getElementById('hyT').style.color=l[3]}
+hyR.addEventListener('input',hy);hy();
+
+/* ---------- scenarios ---------- */
+const SCN=[['A · 起霧迷途','郊山傍晚突然起霧，你發現自己偏離軌跡約 60 公尺，手機電量 30%，只有一格訊號。'],
+ ['B · 隊友扭傷','中級山第二天，隊友腳踝扭傷無法行走，現場沒有手機訊號，隊上有一台 inReach。'],
+ ['C · 颱風逼近','多日縱走第 3 天，收到颱風消息後就失去訊號，留守人聯絡不上你們。'],
+ ['D · 失溫徵兆','稜線上風雨交加，一位隊員開始劇烈顫抖、講話含糊，天快黑了。'],
+ ['E · 手機摔壞','唯一裝了登山 APP 的手機摔壞，你有紙圖、指北針，隊友手機有電但沒訊號。'],
+ ['F · 獨攀失聯','你一個人走郊山岔路迷途，手機剩 15%，家人只知道你「去爬山」。']];
+let deck=[];
+document.getElementById('scnDraw').onclick=()=>{if(!deck.length)deck=SCN.map((x,i)=>i).sort(()=>Math.random()-.5);const s=SCN[deck.pop()];
+  document.getElementById('scnTag').textContent='情境 '+s[0]+'　（剩 '+deck.length+' 張）';document.getElementById('scnText').textContent=s[1]};
+
+/* ---------- checklist ---------- */
+const CK=['事先下載離線地圖','出發前把行程告知可靠的留守人','Google 地圖即時位置分享給留守人','開啟 Apple「尋找」／Google「尋找我的裝置」','安裝並註冊 119 報案 APP','裝好座標 APP，練習讀出經緯度','在登山口完成定位，再開飛航模式','行動電源與充電線','手機放透明防水袋','關閉省電模式、APP 定位權限設為「永遠」','清出手機儲存空間','紙本地圖＋指北針','保暖防寒衣物（失溫第一優先）','依行程風險評估 inReach／衛星電話／無線電','具備基本野外救護技能'];
+const ckSaved=JSON.parse(store.get('soil_check')||'[]');const ckBox=document.getElementById('chk');
+CK.forEach((t,i)=>{const l=document.createElement('label');const c=document.createElement('input');c.type='checkbox';c.checked=ckSaved.includes(i);l.classList.toggle('done',c.checked);
+  l.appendChild(c);l.appendChild(document.createTextNode(t));c.onchange=()=>{l.classList.toggle('done',c.checked);saveCk()};ckBox.appendChild(l)});
+function saveCk(){const v=[...ckBox.querySelectorAll('input')].map((c,i)=>c.checked?i:-1).filter(i=>i>=0);store.set('soil_check',JSON.stringify(v));
+  document.getElementById('chkCount').textContent='已完成 '+v.length+' / '+CK.length+(v.length===CK.length?'　🎉 可以出發了！':'')}
+saveCk();
+
+
+/* ---------- 聽眾版（?clean）：展開答案 ---------- */
+if(WK.clean){
+  document.querySelectorAll('.flip').forEach(f=>f.classList.add('on'));
+  document.querySelectorAll('.q').forEach(q=>{const b=q.querySelectorAll('.opts button')[+q.dataset.a];b&&b.click();});
+  const ch=document.getElementById('sosChain'); if(ch) ch.innerHTML=SOS.map((t,i)=>'<div class="c good"><span class="num" style="background:var(--ok)">'+(i+1)+'</span>'+t+'</div>').join('');
+  const pool=document.getElementById('sosPool'); if(pool) pool.innerHTML='';
+  const st=document.getElementById('scnText'); if(st){ st.style.fontSize='21px'; st.innerHTML=SCN.map(s=>'<b>'+s[0]+'</b>　'+s[1]).join('<br>'); document.getElementById('scnTag').textContent='六張情境卡'; }
+  const v=document.querySelector('#tri .v[data-k="loc"]'); v&&v.dispatchEvent(new Event('click'));
+}
+})();
+</script>
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+  import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy, doc, setDoc, updateDoc, getDocs, deleteDoc, increment } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+  import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+  import { initializeAppCheck, ReCaptchaV3Provider } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app-check.js';
+  const firebaseConfig = {
+    apiKey: "AIzaSyBPaIDGb3RaYhxYrXVE_6YndLUi2jLv1R4",
+    authDomain: "html-slide-db.firebaseapp.com",
+    projectId: "html-slide-db",
+    storageBucket: "html-slide-db.firebasestorage.app",
+    messagingSenderId: "1045858073731",
+    appId: "1:1045858073731:web:8d70945fa081f49929afb6"
+  };
+  const app = initializeApp(firebaseConfig);
+  // App Check 綁定 phu00572.github.io：本機開啟時互動資料無法讀寫（其餘頁面不受影響）
+  try { initializeAppCheck(app, { provider: new ReCaptchaV3Provider('6LevoHstAAAAALRLwnA0DSLiXAK8wER_LEM-eP9b'), isTokenAutoRefreshEnabled: true }); } catch(e) { console.warn('App Check 未啟用', e); }
+  const fdb = getFirestore(app);
+  const auth = getAuth(app);
+  // 不用 top-level await：介面先畫好，登入完成後才讀寫資料（本機／離線時版面照樣完整）
+  const ready = signInAnonymously(auth).catch(e => console.error('匿名登入失敗', e));
+  const SLUG = 'ost2026';
+  function loadStore(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function saveStore(k,v){ try { localStorage.setItem(k,v); } catch(e){} }
+  const COLORS = ['#2E7D9A','#D9822B','#C0392B','#1F3B2D','#2F8F5B','#7A5C99'];
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  /* ---------- 文字雲 ---------- */
+  const wordsRef = collection(fdb, SLUG + '_wordcloud');
+  let wcData = [];
+  async function wcSubmit(){
+    const input = document.getElementById('wc-input'); const word = input.value.trim(); if(!word) return;
+    const btn = document.getElementById('wc-btn'); btn.disabled = true;
+    try { await ready; await addDoc(wordsRef, { word, created_at: serverTimestamp() }); input.value=''; } catch(e){ console.error(e); } finally { btn.disabled = false; }
+  }
+  document.getElementById('wc-input').addEventListener('keypress', e => { if(e.key==='Enter') wcSubmit(); });
+  document.getElementById('wc-btn').addEventListener('click', wcSubmit);
+  ready.then(() => onSnapshot(query(wordsRef, orderBy('created_at','asc')), snap => {
+    const words = []; snap.forEach(d => words.push(d.data().word));
+    const counts = {}; words.forEach(w => counts[w]=(counts[w]||0)+1);
+    wcData = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+    document.getElementById('wc-total').textContent = words.length;
+    document.getElementById('wc-unique').textContent = wcData.length;
+    document.getElementById('wc-list').innerHTML = wcData.slice(0,10).map(([w,c])=>
+      `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--line)"><span>${escapeHtml(w)}</span><b style="color:var(--sec)">${c}</b></div>`).join('') || '<div class="muted">尚無資料</div>';
+    document.getElementById('wc-empty').style.display = wcData.length ? 'none' : '';
+    drawWordCloud();
+  }, err => console.warn('文字雲讀取失敗（本機或網路）', err)));
+  function drawWordCloud(){
+    const canvas = document.getElementById('wc-canvas');
+    if(!canvas || typeof WordCloud==='undefined') return;
+    const r = canvas.getBoundingClientRect(); if(r.width<10||r.height<10) return;
+    const sc = Reveal.getScale ? Reveal.getScale() : 1;
+    canvas.width = r.width/sc; canvas.height = r.height/sc;
+    if(!wcData.length) return;
+    const max = wcData[0][1];
+    WordCloud(canvas, { list: wcData.map(([w,c])=>[w, Math.max(26, Math.round(c/max*110))]), gridSize:8, weightFactor:1,
+      fontFamily:'"Noto Sans TC","Microsoft JhengHei",sans-serif', fontWeight:900,
+      color:()=>COLORS[Math.floor(Math.random()*COLORS.length)], backgroundColor:'transparent', rotateRatio:0.2, shuffle:true });
+  }
+
+  /* ---------- 投票（333 原則） ---------- */
+  const POLL_OPTIONS = [{id:'a',label:'🍙 3 週未進食'},{id:'b',label:'💧 3 天沒喝水'},{id:'c',label:'🥶 3 小時失溫'}];
+  const POLL_ANSWER = 'c';
+  const pollRef = doc(fdb, SLUG + '_poll', 'results');
+  const uidOf = () => (auth.currentUser && auth.currentUser.uid) || (()=>{ const k=SLUG+'_uid'; let id=loadStore(k); if(!id){ id='u_'+Math.random().toString(36).slice(2,9); saveStore(k,id); } return id; })();
+  let myVote = null;
+  const pollBox = document.getElementById('poll-options');
+  POLL_OPTIONS.forEach(o => {
+    const b = document.createElement('button'); b.className='poll-opt'; b.id='po-'+o.id;
+    b.innerHTML = `<span class="pk" id="pk-${o.id}"></span><span style="flex:1">${o.label}</span><span class="pb"><span id="pb-${o.id}"></span></span><span class="pp" id="pp-${o.id}">0%</span>`;
+    b.onclick = () => vote(o.id); pollBox.appendChild(b);
+  });
+  async function vote(id){ myVote=id; try { await ready; await setDoc(pollRef, { updated_at: serverTimestamp(), votes: { [uidOf()]: id } }, { merge:true }); } catch(e){ console.error(e); } }
+  function revealAnswer(){ document.getElementById('po-'+POLL_ANSWER).classList.add('answer'); }
+  document.getElementById('poll-reveal').onclick = revealAnswer;
+  if (WK.clean) revealAnswer();
+  ready.then(() => onSnapshot(pollRef, snap => {
+    const votes = (snap.data()||{}).votes || {};
+    myVote = votes[uidOf()] || null;
+    const counts = {}; POLL_OPTIONS.forEach(o=>counts[o.id]=0);
+    Object.values(votes).forEach(v=>{ if(counts[v]!==undefined) counts[v]++; });
+    const total = Object.values(counts).reduce((a,b)=>a+b,0);
+    document.getElementById('poll-total').textContent = total;
+    POLL_OPTIONS.forEach(o => {
+      const pct = total ? Math.round(counts[o.id]/total*100) : 0;
+      document.getElementById('pb-'+o.id).style.width = pct+'%';
+      document.getElementById('pp-'+o.id).textContent = pct+'%';
+      const k = document.getElementById('pk-'+o.id);
+      k.textContent = myVote===o.id ? '✓' : ''; k.style.background = myVote===o.id ? 'var(--sec)' : 'transparent';
+    });
+  }, err => console.warn('投票讀取失敗（本機或網路）', err)));
+
+  /* ---------- 全域提問牆 ---------- */
+  const qaRef = collection(fdb, SLUG + '_qa');
+  async function qaSubmit(){
+    const input = document.getElementById('qa-input'); const text = input.value.trim(); if(!text) return;
+    const btn = document.getElementById('qa-btn'); btn.disabled = true;
+    try { await ready; await addDoc(qaRef, { text, likes:0, created_at: serverTimestamp() }); input.value=''; } catch(e){ console.error(e); } finally { btn.disabled = false; }
+  }
+  document.getElementById('qa-input').addEventListener('keypress', e => { if(e.key==='Enter') qaSubmit(); });
+  document.getElementById('qa-btn').addEventListener('click', qaSubmit);
+  const likedKey = SLUG + '_liked'; const liked = new Set(JSON.parse(loadStore(likedKey) || '[]'));
+  window.qaLike = async function(id){
+    if(liked.has(id)) return; liked.add(id); saveStore(likedKey, JSON.stringify([...liked]));
+    try { await updateDoc(doc(fdb, SLUG+'_qa', id), { likes: increment(1) }); } catch(e){ console.error(e); liked.delete(id); saveStore(likedKey, JSON.stringify([...liked])); }
+  };
+  ready.then(() => onSnapshot(query(qaRef, orderBy('created_at','desc')), snap => {
+    const items = []; snap.forEach(d => items.push({ id:d.id, ...d.data() }));
+    items.sort((a,b)=>(b.likes||0)-(a.likes||0));
+    document.getElementById('qa-list').innerHTML = items.length ? items.map(q =>
+      `<div class="qa-item"><span class="qa-text">${escapeHtml(q.text)}</span><button class="qa-like" ${liked.has(q.id)?'disabled style="opacity:.55"':''} onclick="qaLike('${q.id}')">👍 ${q.likes||0}</button></div>`).join('')
+      : '<div style="opacity:.6;text-align:center;padding:20px">還沒有問題，當第一個發問的人 🙋</div>';
+  }, err => console.warn('提問牆讀取失敗（本機或網路）', err)));
+  const qaSidebar = document.getElementById('qa-sidebar'), qaOverlay = document.getElementById('qa-overlay');
+  window.toggleQA = function(force){
+    const open = force!==undefined ? force : !qaSidebar.classList.contains('open');
+    qaSidebar.classList.toggle('open', open); qaOverlay.classList.toggle('show', open);
+    if(open) setTimeout(()=>document.getElementById('qa-input').focus(), 300);
+  };
+  document.getElementById('qa-handle').addEventListener('click', ()=>window.toggleQA());
+  qaOverlay.addEventListener('click', ()=>window.toggleQA(false));
+
+  /* ---------- 課後清除（?reset=1 講師按鈕） ---------- */
+  window.clearInteractions = async function(silent){
+    await ready;
+    let total = 0;
+    for (const c of [SLUG+'_wordcloud', SLUG+'_qa']) {
+      const snap = await getDocs(collection(fdb, c));
+      for (const d of snap.docs) { await deleteDoc(d.ref); total++; }
+    }
+    try { await deleteDoc(doc(fdb, SLUG+'_poll', 'results')); } catch(e){}
+    if(!silent) alert('已清空互動資料，共 ' + total + ' 筆。');
+    return total;
+  };
+  if (new URLSearchParams(location.search).has('reset')) {
+    const b = document.createElement('button');
+    b.id = 'reset-btn'; b.textContent = '🗑 重置本場資料';
+    b.style.cssText = 'position:fixed;right:16px;bottom:60px;z-index:1200;padding:11px 16px;background:rgba(192,57,43,.95);color:#fff;border:none;border-radius:24px;font-weight:900;font-size:15px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.4)';
+    b.onclick = async () => {
+      if(!confirm('確定清空本場所有互動資料？（文字雲、投票、提問牆）此動作無法復原。')) return;
+      b.disabled = true; b.textContent = '清除中…';
+      try { const n = await window.clearInteractions(true); b.textContent = '✅ 已清空 ' + n + ' 筆'; }
+      catch(e) { console.error(e); b.textContent = '❌ 失敗，見 console'; }
+      setTimeout(()=>{ b.disabled=false; b.textContent='🗑 重置本場資料'; }, 2600);
+    };
+    document.body.appendChild(b);
+  }
+
+  /* ---------- QR code 與切頁重繪 ---------- */
+  const BASE = 'https://phu00572.github.io/outdoor-survival-triangle/';
+  function makeQR(id, hash){ const el=document.getElementById(id); if(!el || typeof QRCode==='undefined') return; el.innerHTML=''; new QRCode(el, { text: BASE + hash, width: 150, height: 150, correctLevel: QRCode.CorrectLevel.M }); }
+  makeQR('qr-wc', '#/wordcloud'); makeQR('qr-poll', '#/poll');
+  Reveal.on('slidechanged', e => { if(e.currentSlide && e.currentSlide.id==='wordcloud') setTimeout(drawWordCloud, 200); });
+  if (Reveal.getCurrentSlide && Reveal.getCurrentSlide()?.id==='wordcloud') setTimeout(drawWordCloud, 400);
+</script>
+</body>
+</html>

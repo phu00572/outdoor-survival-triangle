@@ -1,0 +1,80 @@
+/* workshop-kit.css — 搭配 workshop-kit.js。顏色沿用簡報的 --accent / --accent2 / --success / --warn，
+   亮色或暗色主題都可用；字級用 px，放進 Reveal 的縮放畫布後會等比縮放。 */
+:root{ --wk-ok:var(--success,#81c784); --wk-bad:#ff6b5b; --wk-line:rgba(255,255,255,.18); --wk-card:rgba(255,255,255,.06); --wk-ink:inherit; }
+
+/* 截圖／聽眾版 */
+html.wk-shot *, html.wk-shot *::before, html.wk-shot *::after{ transition:none !important; animation:none !important; }
+html.wk-clean .wk-ui, html.wk-clean #qa-sidebar, html.wk-clean #qa-overlay, html.wk-clean #qa-handle,
+html.wk-clean .reveal .controls, html.wk-clean .reveal .progress, html.wk-clean #reset-btn{ display:none !important; }
+
+.ok{ color:var(--wk-ok); font-weight:900; } .bad{ color:var(--wk-bad); font-weight:900; }
+.wk-muted{ opacity:.6; }
+.wk-btn{ border:2px solid var(--accent2,#4fc3f7); background:transparent; color:var(--accent2,#4fc3f7); border-radius:12px; padding:8px 18px; font:inherit; font-size:18px; font-weight:700; cursor:pointer; }
+
+/* 1 計時器 */
+.wk-timer{ display:inline-flex; align-items:center; gap:14px; background:#111a; border:1px solid var(--wk-line); color:#fff; border-radius:16px; padding:10px 18px; white-space:nowrap; }
+.wk-timer .wk-lb{ font-size:15px; opacity:.75; line-height:1.3; }
+.wk-timer .wk-t{ font-family:ui-monospace,Consolas,monospace; font-size:44px; font-weight:700; min-width:140px; text-align:center; }
+.wk-timer .wk-t.warn{ color:#FFB25B; } .wk-timer .wk-t.over{ color:#FF6B5B; }
+.wk-timer button{ background:#ffffff22; border:0; color:#fff; border-radius:10px; padding:9px 14px; font:inherit; font-size:17px; font-weight:700; cursor:pointer; }
+
+/* 2 翻牌卡（給 .wk-flip 指定高度） */
+.wk-flip{ perspective:1200px; cursor:pointer; position:relative; min-height:220px; }
+.wk-flip .wk-front,.wk-flip .wk-back{ position:absolute; inset:0; backface-visibility:hidden; border-radius:18px; padding:24px; display:flex; flex-direction:column; justify-content:center; transition:transform .6s; }
+.wk-flip .wk-front{ background:var(--wk-card); border:2px dashed var(--wk-line); }
+.wk-flip .wk-back{ background:var(--accent,#e8643a); color:#fff; transform:rotateY(180deg); }
+.wk-flip.on .wk-front{ transform:rotateY(180deg); } .wk-flip.on .wk-back{ transform:rotateY(360deg); }
+
+/* 3 測驗 */
+.wk-quiz{ background:var(--wk-card); border:1px solid var(--wk-line); border-radius:14px; padding:14px 18px; text-align:left; }
+.wk-quiz .wk-q{ font-size:22px; font-weight:700; margin-bottom:10px; }
+.wk-opts{ display:flex; flex-wrap:wrap; gap:10px; }
+.wk-opts button{ border:2px solid var(--wk-line); background:transparent; color:inherit; border-radius:10px; padding:7px 16px; font:inherit; font-size:18px; cursor:pointer; }
+.wk-opts button.right{ background:var(--wk-ok); border-color:var(--wk-ok); color:#0d1117; }
+.wk-opts button.wrong{ border-color:var(--wk-bad); color:var(--wk-bad); }
+.wk-fb{ font-size:17px; margin-top:8px; min-height:1.4em; opacity:.9; }
+
+/* 4 排序遊戲 */
+.wk-order-box{ display:grid; grid-template-columns:1fr 1fr; gap:20px; text-align:left; }
+.wk-order-box > .wk-btn{ grid-column:1; justify-self:start; align-self:start; }
+.wk-pool{ display:flex; flex-wrap:wrap; gap:10px; align-content:flex-start; }
+.wk-pool button{ background:var(--wk-card); color:inherit; border:2px solid var(--wk-line); border-radius:12px; padding:10px 14px; font:inherit; font-size:18px; text-align:left; cursor:pointer; }
+.wk-pool button.used{ opacity:.2; pointer-events:none; }
+.wk-chain{ display:flex; flex-direction:column; gap:8px; grid-row:1 / span 2; grid-column:2; }
+.wk-slot{ display:flex; gap:12px; align-items:center; border:2px solid var(--wk-line); border-radius:12px; padding:8px 14px; font-size:18px; min-height:48px; }
+.wk-slot.good{ border-color:var(--wk-ok); } .wk-slot.no{ border-color:var(--wk-bad); }
+.wk-num{ display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:50%; background:var(--accent2,#4fc3f7); color:#0d1117; font-weight:900; flex:none; }
+
+/* 5 滑桿等級 */
+.wk-levels{ display:flex; flex-direction:column; gap:14px; text-align:left; }
+.wk-lv-num b{ font-size:96px; font-weight:900; line-height:1; } .wk-lv-num span{ font-size:34px; font-weight:900; margin-left:8px; }
+.wk-levels input[type=range]{ width:100%; height:30px; accent-color:var(--accent,#e8643a); touch-action:none; }
+.wk-lv-box{ border-top:8px solid; border-radius:14px; background:var(--wk-card); padding:16px 20px; min-height:130px; }
+.wk-lv-box h3{ margin:0 0 6px; font-size:32px; } .wk-lv-box p{ margin:0; font-size:20px; }
+
+/* 6 情境卡 */
+.wk-deck{ display:flex; flex-direction:column; gap:12px; text-align:left; }
+.wk-card{ background:var(--wk-card); border:1px solid var(--wk-line); border-radius:16px; padding:22px 26px; font-size:26px; font-weight:700; line-height:1.6; min-height:160px; }
+
+/* 7 檢核清單 */
+ul.wk-check{ list-style:none; padding:0; margin:0; display:grid; grid-template-columns:1fr 1fr; gap:8px 24px; text-align:left; }
+ul.wk-check li label{ display:flex; gap:12px; align-items:flex-start; font-size:20px; line-height:1.45; border:1px solid var(--wk-line); border-radius:12px; padding:9px 14px; cursor:pointer; }
+ul.wk-check li.done label{ border-color:var(--wk-ok); }
+ul.wk-check input{ width:22px; height:22px; margin-top:4px; accent-color:var(--wk-ok); flex:none; }
+.wk-count{ font-size:20px; font-weight:700; }
+
+/* 9 燈箱 */
+img.wk-zoom{ cursor:zoom-in; }
+#wk-lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.92); z-index:2000; display:none; align-items:center; justify-content:center; cursor:zoom-out; }
+#wk-lightbox.on{ display:flex; } #wk-lightbox img{ max-width:96vw; max-height:94vh; object-fit:contain; }
+
+/* 10 課程時鐘 */
+#wk-clock{ position:fixed; top:12px; right:16px; z-index:1100; background:rgba(13,17,23,.85); color:#fff; border:1px solid var(--wk-line); border-radius:999px; padding:6px 14px; font-family:ui-monospace,Consolas,monospace; font-size:14px; cursor:pointer; }
+#wk-clock.behind{ background:#B5532A; }
+
+/* 手機（html-slide-builder 的 body.mobile） */
+body.mobile .wk-order-box, body.mobile ul.wk-check{ grid-template-columns:1fr; }
+body.mobile .wk-chain{ grid-column:1; grid-row:auto; }
+body.mobile .wk-timer .wk-t{ font-size:32px; min-width:100px; }
+body.mobile #wk-clock{ top:auto; bottom:70px; right:10px; font-size:12px; }
+html.wk-shot #wk-clock, html.wk-shot #wk-legacy-banner{ display:none !important; }
