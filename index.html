@@ -120,6 +120,51 @@ input.f:focus{outline:none;border-color:var(--sec)}
 /* slider */
 input[type=range]{width:100%;accent-color:var(--sur);height:30px}
 
+/* YouTube 嵌入（點一下才載入；切頁自動停止） */
+.yt{position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#111 center/cover no-repeat;cursor:pointer;border:1px solid var(--line)}
+.yt::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,.18)}
+.yt .ytp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:96px;height:68px;border-radius:18px;background:#E53935;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.yt .ytp::after{content:"";border-left:28px solid #fff;border-top:17px solid transparent;border-bottom:17px solid transparent;margin-left:6px}
+.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.yt.on{cursor:default}.yt.on::before{display:none}
+.ytcap{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-top:10px;font-size:22px;font-weight:700}
+.ytcap a{font-size:16px;font-weight:500;color:var(--muted);white-space:nowrap}
+/* 三天天氣圖切換 */
+.wx-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.wx-tabs button{display:flex;align-items:center;gap:10px;background:#fff;border:2px solid var(--line);border-radius:12px;padding:6px 10px;font-size:19px;font-weight:700;text-align:left;color:var(--ink);line-height:1.25}
+.wx-tabs button img{width:84px;height:52px;object-fit:cover;border-radius:6px;flex:none}
+.wx-tabs button small{display:block;font-size:14px;font-weight:500;color:var(--muted)}
+.wx-tabs button.on{border-color:var(--sec);background:#EEF4F0}
+/* 四種定位方法：卡片切換手機畫面 */
+.m4{display:grid;grid-template-columns:370px 300px 1fr;gap:30px;flex:1;min-height:0}
+.mcards{display:flex;flex-direction:column;gap:12px;min-height:0}
+.mcard{display:flex;flex-direction:column;gap:4px;text-align:left;background:#fff;border:2px solid var(--line);border-left:8px solid var(--line);border-radius:14px;padding:13px 18px;color:var(--ink)}
+.mcard b{font-size:25px;font-family:var(--serif)}
+.mcard span{font-size:18px;color:var(--muted);line-height:1.4}
+.mcard.on{border-color:var(--sec);background:#EDF5F8}
+.mcard.on b{color:var(--sec)}
+.mcmp{margin-top:auto;background:#FFF7EC;border-radius:12px;padding:12px 16px;font-size:19px;line-height:1.45}
+.phonecol{display:flex;flex-direction:column;align-items:center;gap:6px;min-height:0}
+.phone{width:300px;height:556px;border-radius:40px;background:#1E2A24;padding:12px;box-shadow:0 10px 30px rgba(30,42,36,.25);flex:none}
+.phone .scr{width:100%;height:100%;border-radius:28px;overflow:hidden;background:#fff;display:flex;flex-direction:column;justify-content:center}
+.minfo{display:flex;flex-direction:column;gap:12px;min-height:0}
+.minfo .card{padding:18px 24px}
+.minfo ol{margin:0;padding-left:1.3em}
+.minfo li{font-size:20px;line-height:1.5;margin-bottom:5px}
+.mdo{background:#FFF7EC;border-radius:10px;padding:10px 14px;font-size:19px;line-height:1.45;margin-top:8px}
+body.mobile .m4{grid-template-columns:1fr}
+.hgt{margin-top:16px;display:grid;grid-template-columns:500px 1fr;gap:26px;align-items:center;padding:14px 24px;flex:1;min-height:0}
+body.mobile .hgt{grid-template-columns:1fr;flex:none}
+/* 座標精度三題 */
+.qa3{display:flex;flex-direction:column;gap:14px;min-height:0}
+.qa3 .qc{background:#fff;border:1px solid var(--line);border-left:8px solid var(--sec);border-radius:14px;padding:14px 20px}
+.qa3 .qq{font-size:22px;font-weight:700;line-height:1.4;margin:0}
+.qa3 .aa{font-size:20px;line-height:1.5;margin:8px 0 0}
+.qa3 .aa b{color:var(--sec);font-size:24px}
+#depart-options .poll-opt{font-size:26px}
+#depart-options .poll-opt .pb{flex-basis:140px}
+#depart-options .poll-opt .pp{flex-basis:150px}
+
 /* ===== Reveal.js 轉入 ===== */
 .reveal{font-family:var(--sans);color:var(--ink)}
 .reveal .slides{text-align:left}
@@ -211,28 +256,28 @@ body.mobile #qa-handle>span:nth-child(2),body.mobile #qa-handle .qh-dot{display:
   <div class="tag"><span class="dot"></span>開場 · <b>課程地圖</b></div>
   <h2>今天的 150 分鐘<small>先懂原理，再動手做，最後整合演練</small></h2>
   <div id="agenda" class="grow" style="display:flex;flex-direction:column;justify-content:center;gap:12px"></div>
-  <aside class="notes" data-sec="120">說明課程節奏：每 10～15 分鐘換一種活動。五段實作分別是：讀座標、地圖標點、網頁定位、即時位置分享、綜合演練。</aside>
+  <aside class="notes" data-sec="60">說明課程節奏：每 10～15 分鐘換一種活動。五段實作分別是：四種方法讀座標、座標格式與精度、網頁定位、即時位置分享、綜合演練。</aside>
 </div>
 </section>
-<section data-section="引起動機" data-at="7" data-title="這樣環境你能自救？">
+<section data-section="引起動機" data-at="6" data-title="這樣環境你能自救？">
 <div class="pg" data-part="intro">
   <div class="tag"><span class="dot"></span>引起動機 · <b>問題引入</b></div>
-  <h2>這樣的環境，你能自救嗎？</h2>
-  <div class="cols2" style="grid-template-columns:1.5fr 1fr">
-    <div style="display:flex;flex-direction:column;min-height:0">
-      <div class="picbox grow"><img class="pic wk-zoom" src="images/s2_rain.jpg" alt="2024 年南二段事件 23 日累積雨量圖"></div>
-      <div class="cap">2024 年南二段事件 · 23 日累積雨量圖</div>
+  <h2>這樣的環境，你能自救嗎？<small>相隔 53 年的兩起山難 · 點影片播放</small></h2>
+  <div class="cols2 fit" style="align-items:start">
+    <div>
+      <div class="yt" data-id="9DK7GnfI2ZQ" data-title="清華大學奇萊事件"></div>
+      <div class="ytcap"><span>1971 年 · 清華大學奇萊事件</span><a href="https://youtu.be/9DK7GnfI2ZQ" target="_blank" rel="noopener">在 YouTube 開啟 ↗</a></div>
     </div>
-    <div style="display:flex;flex-direction:column;min-height:0">
-      <div class="picbox grow"><img class="pic wk-zoom" src="images/qilai_1971.jpg" alt="1971 年清華大學奇萊事件"></div>
-      <div class="cap">1971 年清華大學奇萊事件</div>
+    <div>
+      <div class="yt" data-id="YKrS08Y2FH4" data-title="南二段事件"></div>
+      <div class="ytcap"><span>2024 年 · 南二段事件</span><a href="https://youtu.be/YKrS08Y2FH4" target="_blank" rel="noopener">在 YouTube 開啟 ↗</a></div>
     </div>
   </div>
   <div class="fragment" style="margin-top:20px;font-size:26px;font-weight:700">🙋 舉手調查：你曾在山上「完全沒有訊號」超過半天嗎？</div>
-  <aside class="notes" data-sec="120">先不講答案，讓畫面說話。從 1971 年奇萊事件到 2024 年南二段，50 年過去，裝備變了，但「定位、通報、自救」這三件事的難度沒有消失。補充：攀「能高安東軍」遇最強春雨，領隊亡、美籍女教授失聯的新聞也可引用。</aside>
+  <aside class="notes" data-sec="300">先播兩段影片（點一下才會載入播放，換頁會自動停止）。左邊是 1971 年清華大學奇萊事件，右邊是 2024 年南二段事件。看完先不講答案：50 多年過去，裝備變了，但「定位、通報、自救」這三件事的難度沒有消失。補充：攀「能高安東軍」遇最強春雨，領隊亡、美籍女教授失聯的新聞也可引用。</aside>
 </div>
 </section>
-<section id="wordcloud" data-section="引起動機" data-at="9" data-title="破冰文字雲">
+<section id="wordcloud" data-section="引起動機" data-at="11" data-title="破冰文字雲">
 <div class="pg" data-part="intro">
   <div class="tag"><span class="dot"></span>引起動機 · <b>破冰</b></div>
   <h2>上山時，你靠什麼求救？<small>用手機掃 QR code，輸入一個關鍵詞（可以送出好幾次）</small></h2>
@@ -257,7 +302,7 @@ body.mobile #qa-handle>span:nth-child(2),body.mobile #qa-handle .qh-dot{display:
   <aside class="notes" data-sec="60">請大家用手機掃 QR code，輸入「上山時你靠什麼求救」。等 30～40 秒，挑兩三個詞回應：多數人會寫手機——今天就是要告訴大家，手機只是三角形的其中一種工具，沒有一個方法是保證有用的。（網路不穩時改成舉手調查。）</aside>
 </div>
 </section>
-<section data-section="引起動機" data-at="10" data-title="南二段：最後的訊號">
+<section data-section="引起動機" data-at="12" data-title="南二段：最後的訊號">
 <div class="pg" data-part="intro">
   <div class="tag"><span class="dot"></span>案例 · <b>2024 年 7 月南二段事件（凱米颱風）</b></div>
   <div class="cols2" style="grid-template-columns:1.55fr 1fr">
@@ -272,27 +317,66 @@ body.mobile #qa-handle>span:nth-child(2),body.mobile #qa-handle .qh-dot{display:
   <aside class="notes" data-sec="180">逐步按出時序。強調：手機只有「零星收訊」——一次短暫的基地台通聯紀錄，成為搜救研判位置的重要線索。</aside>
 </div>
 </section>
-<section data-section="引起動機" data-at="13" data-title="南二段：預定行程">
+<section data-section="引起動機" data-at="15" data-title="南二段：三天的天氣">
 <div class="pg" data-part="intro">
-  <div class="tag"><span class="dot"></span>案例 · <b>預定行程與路線</b></div>
-  <div class="cols2" style="grid-template-columns:1.4fr 1fr">
-    <div class="picbox"><img class="pic wk-zoom" src="images/s2_route.jpg" alt="南二段事件的預定行程與路線"></div>
-    <div style="display:flex;flex-direction:column;gap:20px;justify-content:center">
-      <div class="card sec">
-        <h3>兩人一組 · 3 分鐘討論</h3>
-        <p style="margin:0 0 10px"><b>A 是隊員：</b>7/22 在雲峰讀到颱風訊息，你會怎麼做？</p>
-        <p style="margin:0"><b>B 是留守人：</b>7/23 聯絡不上隊伍，你會怎麼做？</p>
+  <div class="tag"><span class="dot"></span>案例 · <b>7/22–7/24 行程與天氣狀況</b></div>
+  <div class="cols2" style="grid-template-columns:1.55fr 1fr">
+    <div style="display:flex;flex-direction:column;gap:10px;min-height:0">
+      <div class="picbox grow"><img id="wxBig" class="pic wk-zoom" src="images/s2_0722.jpg" alt="南二段 7 月 22 日行程與天氣狀況"></div>
+      <div id="wxTabs" class="wx-tabs">
+        <button type="button" class="on" data-k="22"><img src="images/s2_0722.jpg" alt=""><span>7/22<small>行程與颱風訊息</small></span></button>
+        <button type="button" data-k="23"><img src="images/s2_0723.jpg" alt=""><span>7/23<small>測站逐時資料</small></span></button>
+        <button type="button" data-k="24"><img src="images/s2_0724.jpg" alt=""><span>7/24<small>測站逐時資料</small></span></button>
       </div>
-      <div class="fragment card" style="background:#FFF7EC">
-        <p style="margin:0;font-size:21px">這個案例同時說明三件事：<br><b style="color:var(--loc)">定位</b>要有手機以外的備援；<b style="color:var(--com)">通報</b>不能只靠零星收訊的手機；<b style="color:var(--sur)">自救</b>取決於氣象研判與停損決斷。</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;justify-content:center;min-height:0">
+      <div class="card sec" style="padding:20px 26px">
+        <h3>分組討論 · 3 分鐘</h3>
+        <p id="wxCap" style="margin:0 0 10px;font-size:19px;background:#F4F1E8;border-radius:10px;padding:10px 14px"></p>
+        <ol style="font-size:21px;line-height:1.5">
+          <li>三天裡，每天出發前你會<b>前進、停留還是撤退</b>？</li>
+          <li>哪一個時間點，是最後的<b>停損點</b>？</li>
+          <li>你是留守人，7/23 起聯絡不上隊伍，要做什麼？</li>
+        </ol>
+      </div>
+      <div class="fragment card" style="background:#FFF7EC;padding:16px 22px">
+        <p style="margin:0;font-size:20px">這個案例同時說明三件事：<b style="color:var(--loc)">定位</b>要有手機以外的備援；<b style="color:var(--com)">通報</b>不能只靠零星收訊的手機；<b style="color:var(--sur)">自救</b>取決於氣象研判與停損決斷。</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button type="button" class="btn" style="font-size:18px" data-zoom="images/s2_route.jpg">看預定行程圖</button>
+        <button type="button" class="btn" style="font-size:18px" data-zoom="images/s2_rain.jpg">看 7/23 累積雨量圖</button>
       </div>
       <div class="wk-timer" data-min="3" data-label="討論時間"></div>
     </div>
   </div>
-  <aside class="notes" data-sec="240">預定行程：向陽 → 嘉明湖 → 拉庫音溪山屋 → 轆轆谷山屋 → 塔芬谷山屋 → 大水窟山屋。讓兩三組分享，再揭露三個重點，接到下一頁「求生三角形」。</aside>
+  <aside class="notes" data-sec="240">點下方三張小圖切換日期，點大圖可以放大。7/22：拉庫音溪山屋→雲峰→轆轆谷山屋，上午 8:41 已讀到颱風路徑圖，11:18 回報登頂雲峰，現場天氣晴朗。7/23：轆轆谷山屋→塔芬谷山屋，測站資料顯示風小、幾乎沒下雨，但氣壓持續下降。7/24：塔芬谷山屋→大水窟山屋，玉山北峰測站最大瞬間風達 17 m/s，上午 10 時後每小時雨量 10–35 毫米。重點：天氣變壞之前有一天半的「好天氣」，停損點要在還走得動的時候決定。讓兩三組分享，再按出三個重點。</aside>
 </div>
 </section>
-<section data-section="引起動機" data-at="17" data-title="戶外求生三角形">
+<section id="depart" data-section="引起動機" data-at="19" data-title="你會從山屋出發嗎？">
+<div class="pg" data-part="intro">
+  <div class="tag"><span class="dot"></span>案例 · <b>換你決定</b></div>
+  <h2>這樣的風雨，你會從山屋出發嗎？<small>看小油坑實測影片 → 個人思考 1 分鐘 → 用手機投票</small></h2>
+  <div class="cols2" style="grid-template-columns:1.25fr 1fr">
+    <div style="display:flex;flex-direction:column;gap:12px;min-height:0">
+      <div class="yt" data-id="ahnDbDNtg68" data-title="小油坑實測風雨狀況"></div>
+      <div class="card" style="padding:12px 20px;display:flex;gap:16px;align-items:center">
+        <p style="margin:0;font-size:19px;flex:1;line-height:1.5"><b>2025/10/22 小油坑實測</b>　13:00 觀測：鞍部站平均風 9.4 m/s、瞬間風 23.9 m/s、17.2°C；陽明山站當日累積雨量 303.5 毫米。</p>
+        <button type="button" class="btn" data-zoom="images/xiaoyoukeng_obs.jpg" style="flex:none;font-size:18px">看觀測資料</button>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;min-height:0;justify-content:center">
+      <div class="wk-timer" data-min="1" data-label="個人思考"></div>
+      <div id="depart-options" style="display:flex;flex-direction:column;gap:12px" data-prevent-swipe></div>
+      <div style="display:flex;gap:20px;align-items:center">
+        <div class="qr-box" id="qr-depart"></div>
+        <p style="margin:0;font-size:20px;line-height:1.5" class="muted">掃 QR code 投票（可改票）<br>已投票 <b id="depart-total" style="font-size:40px;color:var(--ink);font-family:var(--serif)">0</b> 人</p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes" data-sec="240">情境：你在山屋裡，外面就是影片中的風雨。先播影片（約 1 分鐘內），按「個人思考」計時 1 分鐘，不討論、自己決定。時間到請大家用手機掃 QR code 投票，畫面會即時顯示票數。看完票數各請一位「出發」和「不出發」的人說理由。對照：南二段 7/24 玉山北峰測站最大瞬間風約 17 m/s；影片當時鞍部站瞬間風 23.9 m/s。（網路不穩時改成舉手統計。）</aside>
+</div>
+</section>
+<section data-section="引起動機" data-at="23" data-title="戶外求生三角形">
 <div class="pg" data-part="intro">
   <div class="tag"><span class="dot"></span>核心概念 · <b>戶外求生三角形</b></div>
   <h2>三件事，缺一不可<small>點選三角形的頂點，看各面向的工具與方法</small></h2>
@@ -310,10 +394,10 @@ body.mobile #qa-handle>span:nth-child(2),body.mobile #qa-handle .qh-dot{display:
       <p style="margin-top:20px"><button class="btn" data-zoom="images/triangle_info.jpg">看原簡報三角形全圖</button></p>
     </div>
   </div>
-  <aside class="notes" data-sec="240">三個面向：定位＝運用各種方式標定你的所在地；通報＝運用各種方式將你的位置傳出去；自救＝運用各種方式活下去。關鍵原則：讓自己留在好位置——容易被找到、能收到訊號、能躲避風雨。</aside>
+  <aside class="notes" data-sec="180">三個面向：定位＝運用各種方式標定你的所在地；通報＝運用各種方式將你的位置傳出去；自救＝運用各種方式活下去。關鍵原則：讓自己留在好位置——容易被找到、能收到訊號、能躲避風雨。</aside>
 </div>
 </section>
-<section data-section="引起動機" data-at="21" data-title="三個常見誤解">
+<section data-section="引起動機" data-at="26" data-title="三個常見誤解">
 <div class="pg" data-part="intro">
   <div class="tag"><span class="dot"></span>迷思澄清 · <b>你也這樣想嗎？</b></div>
   <h2>三個常見誤解<small>點擊卡片翻面</small></h2>
@@ -331,40 +415,45 @@ body.mobile #qa-handle>span:nth-child(2),body.mobile #qa-handle .qh-dot{display:
       <div class="fb"><div style="font-size:22px;font-weight:900">✅ 正確理解</div><p>SOS 要經國際中心轉國內權責單位，出勤受天候、資源、技術可行性限制。等待期間要靠<b>自救</b>：保暖、留在好位置。</p></div>
     </div></div>
   </div>
-  <aside class="notes" data-sec="240">先請學員舉手：同意第一張的人有多少？再翻面。inReach 服務條款也寫明：緊急應變人員依其準則決定何時、如何搜救，受作業限制、資源、氣象條件等限制。</aside>
+  <aside class="notes" data-sec="180">先請學員舉手：同意第一張的人有多少？再翻面。inReach 服務條款也寫明：緊急應變人員依其準則決定何時、如何搜救，受作業限制、資源、氣象條件等限制。</aside>
 </div>
 </section>
-<section data-section="定位" data-at="25" data-title="Part 1 定位">
+<section data-section="定位" data-at="29" data-title="Part 1 定位">
 <div class="pg bg divider" data-part="loc" style="background-image:url(images/bg_fog_one.jpg)">
   <div style="margin:auto 0">
-    <div class="kicker">PART 1 · 25–65 分</div>
+    <div class="kicker">PART 1 · 29–65 分</div>
     <h1>定位</h1>
     <p style="font-size:34px;color:#E9EEEA;margin-top:20px">運用各種方式，標定你的所在地</p>
   </div>
 </div>
 <aside class="notes" data-sec="90"></aside></section>
-<section data-section="定位" data-at="25" data-title="手機為什麼能定位">
+<section data-section="定位" data-at="29" data-title="手機為什麼能定位">
 <div class="pg" data-part="loc">
   <div class="tag"><span class="dot"></span>定位 · <b>衛星定位原理</b></div>
-  <h2>手機的「GPS」，其實是四套系統<small>全球衛星導航系統（GNSS）</small></h2>
-  <div class="row" style="flex:1;align-items:center">
-    <div style="flex:0 0 380px;text-align:center">
-      <div class="big">4</div>
-      <p style="font-size:28px;font-weight:900;margin:10px 0 0">顆衛星</p>
-      <p class="muted" style="margin:6px 0 0">至少需要 4 顆，才能算出<br>經度、緯度、高度（三維位置）</p>
+  <h2>手機的「GPS」，其實是四套系統<small>全球衛星導航系統（GNSS）· 衛星主要在中軌道（MEO），離地約 2 萬公里</small></h2>
+  <div class="cols2" style="grid-template-columns:1.2fr 1fr">
+    <div class="g2x2">
+      <div class="card sec fragment" style="padding:20px 24px"><h3>GPS · 美國</h3><p style="margin:0;font-size:20px">運作中 32 顆<br>高度約 20,200 公里，每天繞地球兩圈</p></div>
+      <div class="card sec fragment" style="padding:20px 24px"><h3>GLONASS · 俄羅斯</h3><p style="margin:0;font-size:20px">24 顆運作中<br>高度約 19,100 公里</p></div>
+      <div class="card sec fragment" style="padding:20px 24px"><h3>Galileo · 歐盟</h3><p style="margin:0;font-size:20px">2024 年宣告全面運作<br>高度約 23,200 公里</p></div>
+      <div class="card sec fragment" style="padding:20px 24px"><h3>北斗 BDS · 中國</h3><p style="margin:0;font-size:20px">2020 年正式啟用，35 顆衛星<br>中軌道約 21,500 公里，另有高軌衛星</p></div>
     </div>
-    <div class="g2x2" style="flex:1;height:440px">
-      <div class="card sec fragment"><h3>GPS · 美國</h3><p style="margin:0">運作中 32 顆（承諾至少 24 顆可用）<br>中軌道約 20,200 公里，每天繞地球兩圈</p></div>
-      <div class="card sec fragment"><h3>GLONASS · 俄羅斯</h3><p style="margin:0">24 顆運作中</p></div>
-      <div class="card sec fragment"><h3>Galileo · 歐盟</h3><p style="margin:0">2024 年宣告全面運作</p></div>
-      <div class="card sec fragment"><h3>北斗 BDS · 中國</h3><p style="margin:0">2020 年正式啟用<br>運作系統由 35 顆衛星組成</p></div>
+    <div style="display:flex;flex-direction:column;gap:10px;min-height:0">
+      <div class="picbox grow" style="background:#000;border-color:#000;padding:0"><img class="pic wk-zoom" src="images/meo_orbit.jpg" alt="地球周圍中軌道衛星的即時分布畫面" style="background:#000"></div>
+      <div style="display:flex;gap:14px;align-items:center;justify-content:space-between">
+        <span class="cap" style="margin:0;text-align:left">中軌道衛星即時分布（畫面來源：orbitalradar.com）</span>
+        <a class="btn" href="https://orbitalradar.com" target="_blank" rel="noopener" style="text-decoration:none;font-size:18px;white-space:nowrap;flex:none">🛰️ 開啟即時畫面 ↗</a>
+      </div>
     </div>
   </div>
-  <p class="fragment" style="margin:18px 0 0;font-size:24px">📱 2020 年以後的手機晶片大多能同時接收四套系統——<span class="hl">可用衛星越多，定位越快、越穩</span>。</p>
-  <aside class="notes" data-sec="90">接收器用衛星訊號的傳送時間計算距離。數字為 2026 年查證資料（GPS 於 2026 年 4 月最後一顆 GPS III 入軌後為 32 顆運作中）。這頁是背景知識，不要停留太久。</aside>
+  <div style="display:flex;gap:22px;align-items:center;margin-top:16px">
+    <div class="big" style="font-size:76px;flex:none">4</div>
+    <p style="margin:0;font-size:22px;line-height:1.5"><b>至少 4 顆衛星</b>，才能算出經度、緯度、高度（三維位置）。<span class="fragment"><br>📱 2020 年以後的手機晶片大多能同時接收四套系統——<span class="hl">可用衛星越多，定位越快、越穩</span>。</span></p>
+  </div>
+  <aside class="notes" data-sec="90">接收器用衛星訊號的傳送時間計算距離。右圖是 orbitalradar.com 的即時畫面，可按「開啟即時畫面」現場操作：地球外圍那一圈就是中軌道衛星，導航衛星都在這一層。數字為 2026 年查證資料（GPS 於 2026 年 4 月最後一顆 GPS III 入軌後為 32 顆運作中）。這頁是背景知識，不要停留太久。</aside>
 </div>
 </section>
-<section data-section="定位" data-at="28" data-title="冷開機 vs 熱開機">
+<section data-section="定位" data-at="32" data-title="冷開機 vs 熱開機">
 <div class="pg vc" data-part="loc">
   <div class="tag"><span class="dot"></span>定位 · <b>手機定位的特性</b></div>
   <h2>上山前，先在登山口完成定位</h2>
@@ -386,31 +475,63 @@ body.mobile #qa-handle>span:nth-child(2),body.mobile #qa-handle .qh-dot{display:
   <aside class="notes" data-sec="120">衛星定位不需網路也不需付費。但 A-GPS 能大幅縮短第一次定位的時間。</aside>
 </div>
 </section>
-<section data-section="定位" data-at="30" data-title="誤差與高度">
+<section data-section="定位" data-at="34" data-title="誤差與高度">
 <div class="pg" data-part="loc">
   <div class="tag"><span class="dot"></span>定位 · <b>誤差與高度</b></div>
-  <h2>看懂兩個警戒值</h2>
-  <div class="cols3 grow">
-    <div class="card sec" style="text-align:center;display:flex;flex-direction:column;justify-content:center">
-      <p class="muted" style="margin:0">一般登山環境誤差</p>
-      <div class="big" style="font-size:96px">3–20<span style="font-size:40px">m</span></div>
-      <p style="margin:10px 0 0;font-size:20px">溪谷、密林、峭壁旁、雲層厚 → 誤差變大</p>
+  <h2>看懂警戒值，也看懂「高度」</h2>
+  <div class="cols3 fit">
+    <div class="card sec" style="text-align:center;padding:16px 20px">
+      <p class="muted" style="margin:0;font-size:20px">一般登山環境誤差</p>
+      <div class="big" style="font-size:68px">3–20<span style="font-size:30px">m</span></div>
+      <p style="margin:6px 0 0;font-size:19px">溪谷、密林、峭壁旁、雲層厚 → 誤差變大</p>
     </div>
-    <div class="card sec fragment" style="text-align:center;display:flex;flex-direction:column;justify-content:center;border-top-color:var(--com)">
-      <p class="muted" style="margin:0">APP 顯示誤差超過</p>
-      <div class="big" style="font-size:96px;color:var(--com)">20<span style="font-size:40px">m</span></div>
-      <p style="margin:10px 0 0;font-size:20px">代表<b>定位不佳</b>，移到開闊處再等一下</p>
+    <div class="card sec fragment" style="text-align:center;padding:16px 20px;border-top-color:var(--com)">
+      <p class="muted" style="margin:0;font-size:20px">APP 顯示誤差超過</p>
+      <div class="big" style="font-size:68px;color:var(--com)">20<span style="font-size:30px">m</span></div>
+      <p style="margin:6px 0 0;font-size:19px">代表<b>定位不佳</b>，移到開闊處再等一下</p>
     </div>
-    <div class="card sec fragment" style="text-align:center;display:flex;flex-direction:column;justify-content:center;border-top-color:var(--sur)">
-      <p class="muted" style="margin:0">與參考軌跡相差超過</p>
-      <div class="big" style="font-size:96px;color:var(--sur)">40<span style="font-size:40px">m</span></div>
-      <p style="margin:10px 0 0;font-size:20px">要<b>警覺可能走錯路</b></p>
+    <div class="card sec fragment" style="text-align:center;padding:16px 20px;border-top-color:var(--sur)">
+      <p class="muted" style="margin:0;font-size:20px">與參考軌跡相差超過</p>
+      <div class="big" style="font-size:68px;color:var(--sur)">40<span style="font-size:30px">m</span></div>
+      <p style="margin:6px 0 0;font-size:19px">要<b>警覺可能走錯路</b></p>
     </div>
   </div>
-  <p class="fragment" style="margin:22px 0 0;font-size:23px">⛰️ <b>高度只供參考：</b>衛星算的是「橢球高」不是海拔；氣壓式高度計會受天氣影響，要在已知高度點校正。</p>
+  <div class="card fragment hgt">
+    <svg viewBox="0 0 520 300" style="width:100%;height:auto;max-height:100%" font-family="Noto Sans TC,sans-serif" role="img" aria-label="橢球高與海拔高度示意圖">
+      <defs>
+        <marker id="ahB" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2E7D9A"/></marker>
+        <marker id="ahG" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2F8F5B"/></marker>
+        <marker id="ahO" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#D9822B"/></marker>
+      </defs>
+      <path d="M0 300 L0 236 L150 226 L205 160 L245 178 L300 40 L350 120 L400 100 L470 180 L520 172 L520 300 Z" fill="#E6E0D2" stroke="#8A8372" stroke-width="2"/>
+      <path d="M0 228 C120 214 200 232 300 212 S440 222 520 206" fill="none" stroke="#2F8F5B" stroke-width="4"/>
+      <path d="M0 262 Q260 246 520 262" fill="none" stroke="#2E7D9A" stroke-width="4" stroke-dasharray="10 7"/>
+      <line x1="40" y1="40" x2="300" y2="40" stroke="#5F6B64" stroke-width="1.5" stroke-dasharray="4 5"/>
+      <circle cx="300" cy="40" r="7" fill="#1E2A24"/>
+      <text x="312" y="36" font-size="18" font-weight="700" fill="#1E2A24">山頂</text>
+      <line x1="55" y1="256" x2="55" y2="46" stroke="#2E7D9A" stroke-width="4" marker-start="url(#ahB)" marker-end="url(#ahB)"/>
+      <text x="64" y="120" font-size="19" font-weight="900" fill="#2E7D9A">h</text>
+      <text x="64" y="142" font-size="15" font-weight="700" fill="#2E7D9A">橢球高</text>
+      <line x1="135" y1="217" x2="135" y2="46" stroke="#2F8F5B" stroke-width="4" marker-start="url(#ahG)" marker-end="url(#ahG)"/>
+      <text x="144" y="100" font-size="19" font-weight="900" fill="#2F8F5B">H</text>
+      <text x="144" y="122" font-size="15" font-weight="700" fill="#2F8F5B">海拔</text>
+      <line x1="135" y1="253" x2="135" y2="229" stroke="#D9822B" stroke-width="4" marker-start="url(#ahO)" marker-end="url(#ahO)"/>
+      <text x="146" y="248" font-size="17" font-weight="900" fill="#D9822B">N</text>
+      <text x="330" y="200" font-size="15" font-weight="700" fill="#2F8F5B">大地水準面（≈ 平均海水面）</text>
+      <text x="330" y="284" font-size="15" font-weight="700" fill="#2E7D9A">參考橢球面（WGS84）</text>
+    </svg>
+    <div>
+      <h3 style="font-size:27px;margin-bottom:6px;color:var(--ink)">⛰️ 衛星算的是「橢球高」，不是海拔</h3>
+      <p style="margin:0 0 7px;font-size:19px;line-height:1.5"><b style="color:var(--loc)">橢球高 h</b>：衛星定位直接算出的高度，從「參考橢球面」量起——用數學公式描述的平滑地球。</p>
+      <p style="margin:0 0 7px;font-size:19px;line-height:1.5"><b style="color:var(--ok)">海拔 H</b>：地圖與山頭標高用的高度，從「大地水準面」量起，也就是延伸到陸地底下的平均海水面（台灣以基隆為基準）。</p>
+      <p style="margin:0 0 7px;font-size:19px;line-height:1.5"><b style="color:var(--com)">差距 N</b>：h = H + N。台灣各地約差 20–30 公尺，橢球高比較高。例：玉山主峰海拔 3,952 公尺，橢球高約 3,978 公尺。</p>
+      <p style="margin:0;font-size:19px;line-height:1.5">📱 多數 APP 會自動換算成海拔，但不同手機、不同 APP 仍可能差十幾公尺 → <b>高度只供參考</b>；氣壓式高度計要在已知高度點校正。</p>
+    </div>
+  </div>
+  <aside class="notes" data-sec="180">先講三個警戒值，再按出高度說明。地球不是完美的球：衛星定位用一個平滑的數學橢球（WGS84）當基準，算出來的是橢球高；我們說的海拔則是從平均海水面（大地水準面）量起。兩個基準面在台灣相差約 20–30 公尺（各地不同，數字為約略值），所以同一個山頂，橢球高會比海拔多二十幾公尺。提醒：報位置以經緯度為主，高度只當輔助；氣壓式高度計受天氣影響，要在山屋、三角點等已知高度點校正。</aside>
 </div>
-<aside class="notes" data-sec="120"></aside></section>
-<section data-section="定位" data-at="32" data-title="飛航模式要不要開？">
+</section>
+<section data-section="定位" data-at="37" data-title="飛航模式要不要開？">
 <div class="pg vc" data-part="loc">
   <div class="tag"><span class="dot"></span>定位 · <b>飛航模式</b></div>
   <h2>飛航模式：開？還是關？</h2>
@@ -433,7 +554,7 @@ body.mobile #qa-handle>span:nth-child(2),body.mobile #qa-handle .qh-dot{display:
   <aside class="notes" data-sec="60">回扣南二段：7/24 那次短暫連上玉里基地台的紀錄，就是這種通聯紀錄。</aside>
 </div>
 </section>
-<section data-section="定位" data-at="33" data-title="定位原理小測驗">
+<section data-section="定位" data-at="38" data-title="定位原理小測驗">
 <div class="pg" data-part="loc">
   <div class="tag"><span class="dot"></span>定位 · <b>即時小測驗</b></div>
   <h2>小測驗：你記住了嗎？<small>全場一起喊答案，再點選確認</small></h2>
@@ -454,102 +575,73 @@ body.mobile #qa-handle>span:nth-child(2),body.mobile #qa-handle .qh-dot{display:
   <p id="quizScore" class="muted" style="margin:10px 0 0;font-size:22px"></p>
 </div>
 <aside class="notes" data-sec="120"></aside></section>
-<section data-section="定位" data-at="35" data-title="四種手機定位方法">
-<div class="pg" data-part="loc">
-  <div class="tag"><span class="dot"></span>定位 · <b>手機定位方法</b></div>
-  <h2>四種把座標「讀出來」的方法<small>尋找迷途者，最重要的情資就是正確的 GPS 位置</small></h2>
-  <div class="cols2" style="grid-template-columns:1.1fr 1fr">
-    <div class="g2x2">
-      <div class="card sec"><h3>① Google 地圖</h3><p style="margin:0;font-size:20px">放到最大 → 按右下角定位鍵 → 長按藍色點約 2 秒 → 跳出經緯度</p></div>
-      <div class="card sec"><h3>② 座標 APP</h3><p style="margin:0;font-size:20px">Android：「台灣大地羅盤」等<br>iPhone：內建「指南針」</p></div>
-      <div class="card sec"><h3>③ LINE 位置分享</h3><p style="margin:0;font-size:20px">對話框選分享位置，送出前<b>多按幾次右上角定位鍵</b>讓位置更新</p></div>
-      <div class="card sec"><h3>④ 消防署簡訊定位</h3><p style="margin:0;font-size:20px">點選定位簡訊連結，位置經網路回傳；<b>定位需要時間累積精度</b></p></div>
-    </div>
-    <div class="picbox"><img class="pic wk-zoom" src="images/map_practice.jpg" alt="定位實作用地圖"></div>
-  </div>
-  <aside class="notes" data-sec="120">受理報案或與迷途者通話時，應盡量引導對方自行定位，並依「迷途者報案案情詢問表」取得所需資訊。下一頁開始實作。</aside>
-</div>
-</section>
-<section data-section="定位" data-at="37" data-title="實作①：讀出你的座標">
+<section data-section="定位" data-at="40" data-title="實作①：四種方法讀座標">
 <div class="pg" data-part="loc">
   <div class="tag"><span class="dot"></span>定位 · <b>實作 ①</b></div>
-  <h2>實作①：用三種方法讀出你的座標</h2>
-  <div class="cols2" style="grid-template-columns:1.25fr 1fr">
-    <div class="steps">
-      <div class="step"><span class="num">1</span><div><b style="font-size:24px">Google 地圖</b><p>放到最大 → 右下角定位鍵 → 長按藍色點 2 秒 → 記下跳出的數字</p></div></div>
-      <div class="step"><span class="num">2</span><div><b style="font-size:24px">座標 APP</b><p>Android 開「台灣大地羅盤」；iPhone 滑到最左頁搜尋「指南針」→ 看畫面下方經緯度</p></div></div>
-      <div class="step"><span class="num">3</span><div><b style="font-size:24px">LINE 位置分享</b><p>傳給隔壁同學：先多按幾次右上角定位鍵，再送出</p></div></div>
-      <div class="step" style="background:#FFF7EC"><span class="num" style="background:var(--com)">？</span><div><b style="font-size:24px">比一比</b><p>三種方法讀到的數字一樣嗎？差多少公尺？格式一樣嗎？</p></div></div>
+  <h2>實作①：四種把座標「讀出來」的方法<small>點左邊的卡片 → 看手機畫面 → 講解完馬上動手做</small></h2>
+  <div class="m4">
+    <div class="mcards" id="mCards">
+      <button type="button" class="mcard on" data-k="g"><b>① Google 地圖</b><span>長按藍點，跳出經緯度</span></button>
+      <button type="button" class="mcard" data-k="c"><b>② 座標 APP</b><span>Android「台灣大地羅盤」／iPhone「指南針」</span></button>
+      <button type="button" class="mcard" data-k="l"><b>③ LINE 位置分享</b><span>送出前多按幾次定位鍵</span></button>
+      <button type="button" class="mcard" data-k="s"><b>④ 119 簡訊定位</b><span>點簡訊連結，位置經網路回傳</span></button>
+      <div class="mcmp">🔍 <b>比一比：</b>不同方法讀到的數字一樣嗎？差多少？格式一樣嗎？</div>
     </div>
-    <div style="display:flex;flex-direction:column;gap:20px;justify-content:center">
-      <div class="card"><p style="margin:0 0 8px;font-weight:900">✍️ 把你的座標寫在這裡</p>
-        <input class="f" placeholder="例：25.028803, 121.588231" id="myCoord">
-        <p style="margin:12px 0 0;font-size:19px" id="myCoordOut" class="muted">輸入後會判斷格式並提供地圖連結</p></div>
-      <div class="wk-timer" data-min="10" data-label="實作時間"></div>
+    <div class="phonecol">
+      <div class="phone"><div class="scr" id="mScr"></div></div>
+      <div class="cap" id="mCap" style="margin:0"></div>
+    </div>
+    <div class="minfo">
+      <div class="card sec" id="mInfo"></div>
+      <div>
+        <input class="f" id="myCoord" placeholder="✍️ 把你讀到的座標寫在這裡，例：25.028803, 121.588231" style="font-size:19px">
+        <p style="margin:8px 0 0;font-size:17px;line-height:1.45" id="myCoordOut" class="muted">輸入後會判斷格式，並換算成另一種寫法</p>
+      </div>
+      <div class="wk-timer" data-min="2" data-label="每種方法"></div>
     </div>
   </div>
-  <aside class="notes" data-sec="600">10 分鐘。巡場協助：iPhone 指南針若沒顯示座標，要到「設定 → 隱私權 → 定位服務 → 指南針」開啟「使用 App 期間」與「精確位置」。觀察誰的格式是度分秒、誰是十進位，下一頁換算。</aside>
+  <aside class="notes" data-sec="660">11 分鐘。一次講一種：點左邊卡片，手機畫面和步驟會跟著換；講完按計時器，讓大家做 2 分鐘再換下一種。①②③ 的手機畫面是示意圖，④ 是新北市消防局定位系統的實際畫面。巡場協助：iPhone 指南針若沒顯示座標，要到「設定 → 隱私權與安全性 → 定位服務 → 指南針」開啟「使用 App 期間」與「精確位置」。④ 需要 119 發簡訊才能操作，這裡先講流程，完整練習在實作③網頁定位。受理報案或與迷途者通話時，應盡量引導對方自行定位，並依「迷途者報案案情詢問表」取得所需資訊。觀察誰讀到度分秒、誰讀到十進位，下一頁用得到。</aside>
 </div>
 </section>
-<section data-section="定位" data-at="47" data-title="座標格式換算">
-<div class="pg" data-part="loc">
-  <div class="tag"><span class="dot"></span>定位 · <b>座標格式</b></div>
-  <h2>同一個點，兩種寫法<small>十進位度（DD）↔ 度分秒（DMS）</small></h2>
-  <div class="cols2">
-    <div style="display:flex;flex-direction:column;gap:18px">
-      <div class="card sec">
-        <h3>換算規則</h3>
-        <p style="margin:0;font-size:22px">25.028803°<br>→ 小數 0.028803 × 60 = 1.72818 → <b>1′</b><br>→ 小數 0.72818 × 60 = 43.69 → <b>43.69″</b><br>= <span class="hl">N25° 1′ 43.69″</span></p>
-      </div>
-      <div class="card" style="background:#FFF7EC">
-        <p style="margin:0;font-size:21px">📞 報案時講清楚：<b>「北緯、東經」</b>＋<b>格式</b>＋<b>精度</b>。<br>例：「北緯 25.0288、東經 121.5882，誤差 10 公尺」</p>
-      </div>
-    </div>
-    <div class="card" id="conv">
-      <h3 style="color:var(--loc)">🧮 即時換算器</h3>
-      <p style="margin:0 0 6px;font-size:19px" class="muted">十進位（緯度, 經度）</p>
-      <input class="f" id="ddIn" value="25.028803, 121.588231">
-      <p style="margin:14px 0 6px;font-size:19px" class="muted">度分秒</p>
-      <input class="f" id="dmsIn" value="">
-      <p id="convMsg" style="font-size:19px;margin:14px 0 8px"></p>
-      <a id="convMap" class="btn" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none">在 Google 地圖開啟</a>
-    </div>
-  </div>
-  <aside class="notes" data-sec="360">兩個格式都正確，但混用會出事：把 25°01′43″ 誤寫成 25.0143 會差將近 1.6 公里。換算器任一欄輸入都會自動換算另一欄。</aside>
-</div>
-</section>
-<section data-section="定位" data-at="53" data-title="實作②：在地圖上標點">
+<section data-section="定位" data-at="51" data-title="實作②：座標格式與精度">
 <div class="pg" data-part="loc">
   <div class="tag"><span class="dot"></span>定位 · <b>實作 ②</b></div>
-  <h2>實作②：座標換算與標點</h2>
-  <div class="cols2" style="grid-template-columns:1.2fr 1fr">
-    <div style="display:flex;flex-direction:column;gap:16px">
-      <div class="card sec" data-pt="25.028803,121.588231">
-        <h3>點 A · 攀岩路線上段</h3>
-        <p style="margin:0 0 8px;font-size:21px">N25.028803°　E121.588231° → 換成度分秒：</p>
-        <div style="display:flex;gap:10px"><input class="f pin" placeholder="N25° ?′ ?″" data-ans="lat"><input class="f pin" placeholder="E121° ?′ ?″" data-ans="lon"></div>
-        <p class="ptfb" style="margin:8px 0 0;font-size:19px"></p>
+  <h2>實作②：同一個點，兩種寫法<small>十進位度（DD）↔ 度分秒（DMS）· 右邊三題先算，再按下一步看答案</small></h2>
+  <div class="cols2" style="grid-template-columns:1fr 1.15fr">
+    <div style="display:flex;flex-direction:column;gap:14px;min-height:0">
+      <div class="card sec" style="padding:16px 24px">
+        <h3 style="font-size:26px;margin-bottom:6px">換算規則</h3>
+        <p style="margin:0;font-size:19px;line-height:1.55">25.028803°<br>→ 小數 0.028803 × 60 = 1.72818 → <b>1′</b><br>→ 小數 0.72818 × 60 = 43.69 → <b>43.69″</b><br>= <span class="hl">N25° 1′ 43.69″</span></p>
       </div>
-      <div class="card sec" data-pt="25.020369,121.584400">
-        <h3>點 B · 拇指山下</h3>
-        <p style="margin:0 0 8px;font-size:21px">N25.020369°　E121.584400° → 換成度分秒：</p>
-        <div style="display:flex;gap:10px"><input class="f pin" placeholder="N25° ?′ ?″" data-ans="lat"><input class="f pin" placeholder="E121° ?′ ?″" data-ans="lon"></div>
-        <p class="ptfb" style="margin:8px 0 0;font-size:19px"></p>
-      </div>
-      <div style="display:flex;gap:14px;align-items:center">
-        <button class="btn fill" id="ptCheck">檢查答案</button>
-        <button class="btn" id="ptShow">公布答案</button>
-        <a class="btn" target="_blank" rel="noopener" style="text-decoration:none" href="https://www.google.com/maps?q=25.028803,121.588231">看點 A</a>
-        <a class="btn" target="_blank" rel="noopener" style="text-decoration:none" href="https://www.google.com/maps?q=25.020369,121.584400">看點 B</a>
+      <div class="card" id="conv" style="padding:16px 24px">
+        <h3 style="color:var(--loc);font-size:26px;margin-bottom:6px">🧮 即時換算器</h3>
+        <p style="margin:0 0 4px;font-size:17px" class="muted">十進位（緯度, 經度）</p>
+        <input class="f" id="ddIn" value="25.028803, 121.588231" style="font-size:21px;padding:8px 12px">
+        <p style="margin:10px 0 4px;font-size:17px" class="muted">度分秒</p>
+        <input class="f" id="dmsIn" value="" style="font-size:21px;padding:8px 12px">
+        <p id="convMsg" style="font-size:18px;margin:10px 0 8px"></p>
+        <a id="convMap" class="btn" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;font-size:18px;padding:8px 16px">在 Google 地圖開啟</a>
       </div>
     </div>
-    <div style="display:flex;flex-direction:column;gap:16px;min-height:0">
-      <div class="picbox grow"><img class="pic wk-zoom" src="images/map_practice.jpg" alt="實作地圖"></div>
-      <p style="margin:0;font-size:20px">進階：用電腦版 Google 地圖、BaseCamp 或 Google Earth 標出 A、B 兩點。</p>
-      <div class="wk-timer" data-min="9" data-label="實作時間"></div>
+    <div class="qa3">
+      <div class="qc">
+        <p class="qq">Q1　座標差 1 度、差 1 分、差 1 秒，各差了幾公里？</p>
+        <p class="aa fragment">1° ≈ <b>111 公里</b>　1′ ≈ <b>1.85 公里</b>　1″ ≈ <b>0.031 公里</b>（31 公尺）<br><span class="muted" style="font-size:17px">這是緯度（南北向）；經度（東西向）在台灣大約是 0.9 倍，1° ≈ 101 公里。</span></p>
+      </div>
+      <div class="qc">
+        <p class="qq">Q2　用「度」表示，誤差要在 10 公尺以下，小數要寫到第幾位？</p>
+        <p class="aa fragment">小數<b>第 5 位</b>　例：25.02880<br><span class="muted" style="font-size:17px">第 4 位跳一格 ≈ 11 公尺（超過 10 公尺）；第 5 位跳一格 ≈ 1.1 公尺。</span></p>
+      </div>
+      <div class="qc">
+        <p class="qq">Q3　用「度分秒」表示，誤差要在 10 公尺以下，秒要取到小數第幾位？</p>
+        <p class="aa fragment">秒的小數<b>第 1 位</b>　例：25° 1′ 43.7″<br><span class="muted" style="font-size:17px">1″ ≈ 31 公尺（不夠）；0.1″ ≈ 3.1 公尺。</span></p>
+      </div>
+      <div class="fragment card" style="background:#FFF7EC;padding:12px 20px">
+        <p style="margin:0;font-size:19px;line-height:1.5">📞 報案時講清楚：<b>「北緯、東經」＋格式＋位數</b>。例：「北緯 25.02880、東經 121.58823」</p>
+      </div>
     </div>
   </div>
-  <aside class="notes" data-sec="540">9 分鐘。準備筆電 4 台供分組操作電腦版 Google 地圖、BaseCamp、Google Earth。參考資源：行動網路涵蓋率 freqgis.ttida.org.tw、中華電信 coverage.cht.com.tw、地圖產生器 twmap.happyman.idv.tw。答案：A＝N25°1′43.69″ E121°35′17.63″；B＝N25°1′13.33″ E121°35′3.84″。</aside>
+  <aside class="notes" data-sec="660">11 分鐘。先用上一頁大家讀到的座標示範換算（任一欄輸入，另一欄自動換算），再請各組算右邊三題，約 3 分鐘後逐題按出答案。算法：地球一圈約 40,000 公里 ÷ 360 度 ≈ 111 公里；1 分 = 1/60 度 ≈ 1.85 公里（就是 1 海里）；1 秒 = 1/60 分 ≈ 31 公尺。Q2：0.0001 度 ≈ 11 公尺，所以要寫到第 5 位（0.00001 度 ≈ 1.1 公尺）。補充：若是四捨五入到第 4 位，實際偏差約 5–8 公尺，勉強夠用，但報案建議唸到第 5 位。Q3：整數秒一格 31 公尺，取到 0.1 秒約 3 公尺。兩個格式都正確，但混用會出事：把 25°01′43″ 誤寫成 25.0143 會差將近 1.6 公里。</aside>
 </div>
 </section>
 <section data-section="定位" data-at="62" data-title="不可過度依賴電子設備">
@@ -970,7 +1062,7 @@ const TOTAL=150;
 const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 
 /* ---------- agenda ---------- */
-(function(){const A=[[0,10,'intro','開場','講師介紹、問題引入'],[10,25,'intro','案例與三角形','南二段事件、三個誤解'],[25,35,'loc','衛星定位原理','GNSS、冷熱開機、誤差、飛航模式'],[35,65,'loc','定位實作','實作①讀座標　實作②換算標點'],[65,75,'','休息',''],[75,105,'com','通報實作','設備選擇、SOS 流程、實作③網頁定位、實作④即時分享'],[105,125,'sur','自救','333 原則、失溫判斷與分級'],[125,145,'act','綜合演練','實作⑤情境卡全流程'],[145,150,'act','總結','行前檢核、帶走一句話、Q&A']];
+(function(){const A=[[0,11,'intro','開場','講師介紹、兩段山難影片'],[11,29,'intro','案例與三角形','南二段三天天氣、出發投票、三個誤解'],[29,40,'loc','衛星定位原理','GNSS、冷熱開機、誤差與高度、飛航模式'],[40,65,'loc','定位實作','實作①四種方法讀座標　實作②座標格式與精度'],[65,75,'','休息',''],[75,105,'com','通報實作','設備選擇、SOS 流程、實作③網頁定位、實作④即時分享'],[105,125,'sur','自救','333 原則、失溫判斷與分級'],[125,145,'act','綜合演練','實作⑤情境卡全流程'],[145,150,'act','總結','行前檢核、帶走一句話、Q&A']];
  const box=document.getElementById('agenda');
  A.forEach(a=>{const r=document.createElement('div');const c=a[2]?SEC[a[2]]:'#9AA59F';
   r.style.cssText='display:flex;align-items:center;gap:20px';
@@ -1012,14 +1104,62 @@ ddIn.addEventListener('input',fromDD);dmsIn.addEventListener('input',fromDMS);fr
 const my=document.getElementById('myCoord'),myO=document.getElementById('myCoordOut');
 my.addEventListener('input',()=>{let p=parseDD(my.value),f='十進位度（DD）';if(!p||/[°′'″"]/.test(my.value)){const q=parseDMS(my.value);if(q){p=q;f='度分秒（DMS）'}}
   if(!p){myO.innerHTML='<span class="muted">輸入「緯度, 經度」</span>';return}
-  myO.innerHTML='<span class="ok">✔ 格式：'+f+'</span><br>DD：'+p[0].toFixed(6)+', '+p[1].toFixed(6)+'<br>DMS：'+toDMS(p[0],'N','S')+', '+toDMS(p[1],'E','W')+'<br><a target="_blank" rel="noopener" href="https://www.google.com/maps?q='+p[0]+','+p[1]+'">在 Google 地圖開啟</a>'});
-function checkPts(reveal){document.querySelectorAll('[data-pt]').forEach(c=>{const [la,lo]=c.dataset.pt.split(',').map(Number);const ins=c.querySelectorAll('.pin');const fb=c.querySelector('.ptfb');
-  const ans=[toDMS(la,'N','S'),toDMS(lo,'E','W')];
-  if(reveal){fb.innerHTML='答案：<b>'+ans[0]+'　'+ans[1]+'</b>';return}
-  const ok=[la,lo].map((v,i)=>{const g=parseOneDMS(ins[i].value);return g!=null&&Math.abs(g-v)<0.5/3600});
-  ins.forEach((x,i)=>x.style.borderColor=ok[i]?'#2F8F5B':'#C0392B');
-  fb.innerHTML=ok.every(Boolean)?'<span class="ok">✔ 全對！誤差在 0.5 秒內</span>':'<span class="bad">還沒對：記得分、秒都是 ×60</span>'})}
-document.getElementById('ptCheck').onclick=()=>checkPts(false);document.getElementById('ptShow').onclick=()=>checkPts(true);
+  myO.innerHTML='<span class="ok">✔ 你寫的是'+f+'</span>　<a target="_blank" rel="noopener" href="https://www.google.com/maps?q='+p[0]+','+p[1]+'">在地圖開啟</a><br>DD：'+p[0].toFixed(6)+', '+p[1].toFixed(6)+'　DMS：'+toDMS(p[0],'N','S')+', '+toDMS(p[1],'E','W')});
+
+/* ---------- YouTube 嵌入：點一下才載入，換頁自動停止 ---------- */
+function ytReset(y){y.classList.remove('on');y.innerHTML='<span class="ytp"></span>'}
+document.querySelectorAll('.yt').forEach(y=>{
+  y.style.backgroundImage='url(https://i.ytimg.com/vi/'+y.dataset.id+'/hqdefault.jpg)';
+  y.setAttribute('role','button');y.setAttribute('aria-label','播放影片：'+(y.dataset.title||''));ytReset(y);
+  y.addEventListener('click',()=>{if(y.classList.contains('on'))return;
+    document.querySelectorAll('.yt.on').forEach(ytReset);y.classList.add('on');
+    y.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+y.dataset.id+'?autoplay=1&rel=0&playsinline=1" title="'+(y.dataset.title||'')+'" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'})});
+Reveal.on('slidechanged',e=>{if(e.previousSlide)e.previousSlide.querySelectorAll('.yt.on').forEach(ytReset)});
+
+/* ---------- 南二段三天天氣圖 ---------- */
+const WX={'22':['images/s2_0722.jpg','南二段 7 月 22 日行程與天氣狀況','<b>7/22</b>　拉庫音溪山屋 → 雲峰 → 轆轆谷山屋。上午 8:41 讀到颱風路徑圖；11:18 回報「登頂雲峰了」，現場天氣晴朗。'],
+ '23':['images/s2_0723.jpg','南二段 7 月 23 日天氣狀況','<b>7/23</b>　轆轆谷山屋 → 塔芬山 → 塔芬谷山屋。測站資料：氣溫 6–16°C、平均風速 1–2 m/s、幾乎沒有降雨，氣壓緩緩下降。'],
+ '24':['images/s2_0724.jpg','南二段 7 月 24 日天氣狀況','<b>7/24</b>　塔芬谷山屋 → 南大水窟山 → 大水窟山屋。玉山北峰測站：氣溫 7–11°C、最大瞬間風達 17 m/s，上午 10 時後每小時雨量 10–35 毫米。']};
+function wxShow(k){const d=WX[k];const im=document.getElementById('wxBig');im.src=d[0];im.alt=d[1];document.getElementById('wxCap').innerHTML=d[2];
+  document.querySelectorAll('#wxTabs button').forEach(b=>b.classList.toggle('on',b.dataset.k===k))}
+document.querySelectorAll('#wxTabs button').forEach(b=>b.addEventListener('click',()=>wxShow(b.dataset.k)));wxShow('22');
+
+/* ---------- 四種定位方法：卡片切換手機畫面 ---------- */
+const SV='<svg viewBox="0 0 306 576" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;display:block" font-family="Noto Sans TC,Microsoft JhengHei,sans-serif">';
+const lab=(x,y,n,t)=>{const w=52+t.length*16;return '<rect x="'+x+'" y="'+(y-17)+'" width="'+w+'" height="34" rx="17" fill="#1E2A24" opacity=".92"/><circle cx="'+(x+17)+'" cy="'+y+'" r="13" fill="#D9822B"/><text x="'+(x+17)+'" y="'+(y+6)+'" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">'+n+'</text><text x="'+(x+38)+'" y="'+(y+6)+'" font-size="16" font-weight="700" fill="#fff">'+t+'</text>'};
+const mapBg='<rect width="306" height="576" fill="#E6ECDF"/><path d="M110 250q50-40 100 0q20 60-40 90q-70 10-60-90z" fill="#CFE3C4"/><path d="M-10 150L320 210M90-10L60 590M-10 420L320 380M230-10L250 590" stroke="#fff" stroke-width="14" fill="none"/>';
+const pin=(x,y)=>'<path d="M'+x+' '+y+'c-22-30-24-58 0-62c24 4 22 32 0 62z" fill="#C0392B"/><circle cx="'+x+'" cy="'+(y-40)+'" r="8" fill="#fff"/>';
+const locBtn=(x,y,hl)=>'<circle cx="'+x+'" cy="'+y+'" r="26" fill="#fff" stroke="'+(hl?'#D9822B':'#C9D1CC')+'" stroke-width="'+(hl?5:2)+'"/><circle cx="'+x+'" cy="'+y+'" r="9" fill="none" stroke="#2E7D9A" stroke-width="3"/><path d="M'+x+' '+(y-17)+'v6M'+x+' '+(y+11)+'v6M'+(x-17)+' '+y+'h6M'+(x+11)+' '+y+'h6" stroke="#2E7D9A" stroke-width="3"/>';
+const METH={
+ g:{t:'① Google 地圖',cap:'示意圖：長按藍點後，座標出現在搜尋列',
+  scr:SV+mapBg+'<rect x="14" y="20" width="278" height="52" rx="26" fill="#fff" stroke="#D9822B" stroke-width="4"/><text x="153" y="53" text-anchor="middle" font-size="20" font-weight="700" fill="#1E2A24">25.028803, 121.588231</text>'
+   +'<circle cx="153" cy="330" r="46" fill="#2E7D9A" opacity=".18"/><circle cx="153" cy="330" r="12" fill="#2E7D9A" stroke="#fff" stroke-width="4"/>'+pin(153,318)+locBtn(262,500,true)
+   +lab(118,98,4,'座標出現在這裡')+lab(20,150,1,'地圖放到最大')+lab(70,396,3,'長按藍點 2 秒')+lab(100,500,2,'按定位鍵')+'</svg>',
+  steps:['兩指把地圖<b>放到最大</b>','按右下角<b>定位鍵</b>，等藍點穩定','<b>長按藍點約 2 秒</b>，放下一根圖釘','讀出經緯度：Android 在上方搜尋列；iPhone 把下方資訊卡往上滑'],
+  go:'打開 Google 地圖，讀出你現在的座標，寫在下面。'},
+ c:{t:'② 座標 APP',cap:'示意圖：iPhone「指南針」下方顯示度分秒',
+  scr:SV+'<rect width="306" height="576" fill="#111814"/><circle cx="153" cy="210" r="118" fill="none" stroke="#fff" stroke-width="2"/><circle cx="153" cy="210" r="104" fill="none" stroke="#8FA39A" stroke-width="14" stroke-dasharray="2 9.2"/><path d="M153 84l-10-20h20z" fill="#E53935"/>'
+   +'<text x="153" y="140" text-anchor="middle" fill="#E53935" font-size="22" font-weight="900">N</text><text x="232" y="218" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">E</text><text x="153" y="298" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">S</text><text x="74" y="218" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">W</text>'
+   +'<text x="153" y="225" text-anchor="middle" fill="#fff" font-size="42" font-weight="700">45°</text>'
+   +'<rect x="18" y="412" width="270" height="84" rx="14" fill="none" stroke="#D9822B" stroke-width="4"/><text x="153" y="446" text-anchor="middle" fill="#fff" font-size="21" font-weight="700">25°01′44″ 北</text><text x="153" y="480" text-anchor="middle" fill="#fff" font-size="21" font-weight="700">121°35′18″ 東</text>'
+   +'<text x="153" y="530" text-anchor="middle" fill="#9AA59F" font-size="16">海拔 120 公尺</text>'+lab(66,378,'★','讀這裡：度分秒')+'</svg>',
+  steps:['Android：安裝並開啟「台灣大地羅盤」','iPhone：主畫面滑到最左頁，搜尋「指南針」','經緯度在畫面下方；iPhone 顯示的是<b>度分秒</b>','iPhone 沒有顯示座標：到「設定 → 定位服務 → 指南針」開啟「使用 App 期間」與「精確位置」'],
+  go:'讀出座標，和方法①的數字比一比。'},
+ l:{t:'③ LINE 位置分享',cap:'示意圖：送出前先按右上角定位鍵',
+  scr:SV+mapBg+'<rect width="306" height="60" fill="#22382C"/><text x="153" y="39" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">位置資訊</text><text x="20" y="40" fill="#fff" font-size="22">✕</text>'
+   +pin(153,262)+locBtn(262,104,true)+lab(62,156,1,'多按幾次定位鍵')
+   +'<rect x="0" y="410" width="306" height="166" fill="#fff"/><text x="20" y="446" font-size="19" font-weight="700" fill="#1E2A24">目前位置</text><text x="20" y="474" font-size="16" fill="#5F6B64">25.0288, 121.5882</text>'
+   +'<rect x="20" y="496" width="266" height="52" rx="12" fill="#2F8F5B"/><text x="153" y="529" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">分享</text>'+lab(150,446,2,'確認後分享')+'</svg>',
+  steps:['聊天室左下角「＋」→「位置資訊」','送出前<b>多按幾次右上角定位鍵</b>，讓圖釘更新到現在的位置','確認圖釘位置正確，再按「分享」','收到的人點開訊息，就能在地圖上看到位置'],
+  go:'把位置傳給隔壁同學，請對方點開確認位置對不對。'},
+ s:{t:'④ 119 簡訊定位',cap:'實際畫面：新北市消防局 GPS 定位輔助系統（點圖放大）',
+  scr:'<img class="wk-zoom" src="images/ntpc_sms_locate.jpg" alt="新北市消防局 GPS 定位輔助系統的手機畫面" style="width:100%;height:auto;display:block;cursor:zoom-in">',
+  steps:['報案後，119 會傳一則<b>定位簡訊</b>到你的手機','點簡訊裡的連結，按「允許」讓瀏覽器取得位置','等經緯度出現；<b>定位需要時間累積精度</b>，不要急著關掉','按「傳送定位」，位置經網路回傳給 119'],
+  go:'這個方法要 119 發簡訊才能操作。現在先確認手機瀏覽器已允許取得位置；完整練習在實作③網頁定位。'}};
+function mShow(k){const d=METH[k];document.getElementById('mScr').innerHTML=d.scr;document.getElementById('mCap').textContent=d.cap;
+  document.getElementById('mInfo').innerHTML='<h3 style="font-size:28px;margin-bottom:8px">'+d.t+'</h3><ol>'+d.steps.map(x=>'<li>'+x+'</li>').join('')+'</ol><div class="mdo">✋ <b>現在動手做：</b>'+d.go+'</div>';
+  document.querySelectorAll('#mCards .mcard').forEach(b=>b.classList.toggle('on',b.dataset.k===k))}
+document.querySelectorAll('#mCards .mcard').forEach(b=>b.addEventListener('click',()=>mShow(b.dataset.k)));mShow('g');
 
 /* ---------- equipment ---------- */
 const EQ={a:['郊山一日、有收訊',['📱 手機＋行動電源（主要）','📍 Google 地圖即時位置分享給留守人','🗺️ 離線地圖、紙圖與指北針（備援）','👤 出發前告知留守人行程']],
@@ -1149,37 +1289,43 @@ if(WK.clean){
       color:()=>COLORS[Math.floor(Math.random()*COLORS.length)], backgroundColor:'transparent', rotateRatio:0.2, shuffle:true });
   }
 
-  /* ---------- 投票（333 原則） ---------- */
-  const POLL_OPTIONS = [{id:'a',label:'🍙 3 週未進食'},{id:'b',label:'💧 3 天沒喝水'},{id:'c',label:'🥶 3 小時失溫'}];
-  const POLL_ANSWER = 'c';
-  const pollRef = doc(fdb, SLUG + '_poll', 'results');
+  /* ---------- 投票（共用）：每個投票一份文件，放在 <slug>_poll ---------- */
   const uidOf = () => (auth.currentUser && auth.currentUser.uid) || (()=>{ const k=SLUG+'_uid'; let id=loadStore(k); if(!id){ id='u_'+Math.random().toString(36).slice(2,9); saveStore(k,id); } return id; })();
-  let myVote = null;
-  const pollBox = document.getElementById('poll-options');
-  POLL_OPTIONS.forEach(o => {
-    const b = document.createElement('button'); b.className='poll-opt'; b.id='po-'+o.id;
-    b.innerHTML = `<span class="pk" id="pk-${o.id}"></span><span style="flex:1">${o.label}</span><span class="pb"><span id="pb-${o.id}"></span></span><span class="pp" id="pp-${o.id}">0%</span>`;
-    b.onclick = () => vote(o.id); pollBox.appendChild(b);
-  });
-  async function vote(id){ myVote=id; try { await ready; await setDoc(pollRef, { updated_at: serverTimestamp(), votes: { [uidOf()]: id } }, { merge:true }); } catch(e){ console.error(e); } }
-  function revealAnswer(){ document.getElementById('po-'+POLL_ANSWER).classList.add('answer'); }
-  document.getElementById('poll-reveal').onclick = revealAnswer;
-  if (WK.clean) revealAnswer();
-  ready.then(() => onSnapshot(pollRef, snap => {
-    const votes = (snap.data()||{}).votes || {};
-    myVote = votes[uidOf()] || null;
-    const counts = {}; POLL_OPTIONS.forEach(o=>counts[o.id]=0);
-    Object.values(votes).forEach(v=>{ if(counts[v]!==undefined) counts[v]++; });
-    const total = Object.values(counts).reduce((a,b)=>a+b,0);
-    document.getElementById('poll-total').textContent = total;
-    POLL_OPTIONS.forEach(o => {
-      const pct = total ? Math.round(counts[o.id]/total*100) : 0;
-      document.getElementById('pb-'+o.id).style.width = pct+'%';
-      document.getElementById('pp-'+o.id).textContent = pct+'%';
-      const k = document.getElementById('pk-'+o.id);
-      k.textContent = myVote===o.id ? '✓' : ''; k.style.background = myVote===o.id ? 'var(--sec)' : 'transparent';
+  function setupPoll(cfg){
+    const p = cfg.prefix || '', ref = doc(fdb, SLUG + '_poll', cfg.doc);
+    const box = document.getElementById(cfg.box);
+    if(!box) return { reveal(){} };
+    cfg.options.forEach(o => {
+      const b = document.createElement('button'); b.className='poll-opt'; b.id=p+'po-'+o.id;
+      b.innerHTML = `<span class="pk" id="${p}pk-${o.id}"></span><span style="flex:1">${o.label}</span><span class="pb"><span id="${p}pb-${o.id}"></span></span><span class="pp" id="${p}pp-${o.id}">${cfg.count ? '0 票' : '0%'}</span>`;
+      b.onclick = async () => { try { await ready; await setDoc(ref, { updated_at: serverTimestamp(), votes: { [uidOf()]: o.id } }, { merge:true }); } catch(e){ console.error(e); } };
+      box.appendChild(b);
     });
-  }, err => console.warn('投票讀取失敗（本機或網路）', err)));
+    ready.then(() => onSnapshot(ref, snap => {
+      const votes = (snap.data()||{}).votes || {};
+      const mine = votes[uidOf()] || null;
+      const counts = {}; cfg.options.forEach(o=>counts[o.id]=0);
+      Object.values(votes).forEach(v=>{ if(counts[v]!==undefined) counts[v]++; });
+      const total = Object.values(counts).reduce((a,b)=>a+b,0);
+      document.getElementById(cfg.total).textContent = total;
+      cfg.options.forEach(o => {
+        const pct = total ? Math.round(counts[o.id]/total*100) : 0;
+        document.getElementById(p+'pb-'+o.id).style.width = pct+'%';
+        document.getElementById(p+'pp-'+o.id).textContent = cfg.count ? counts[o.id]+' 票・'+pct+'%' : pct+'%';
+        const k = document.getElementById(p+'pk-'+o.id);
+        k.textContent = mine===o.id ? '✓' : ''; k.style.background = mine===o.id ? 'var(--sec)' : 'transparent';
+      });
+    }, err => console.warn('投票讀取失敗（本機或網路）', err)));
+    return { reveal(){ if(cfg.answer) document.getElementById(p+'po-'+cfg.answer).classList.add('answer'); } };
+  }
+  /* 333 原則 */
+  const poll333 = setupPoll({ doc:'results', box:'poll-options', total:'poll-total', answer:'c',
+    options:[{id:'a',label:'🍙 3 週未進食'},{id:'b',label:'💧 3 天沒喝水'},{id:'c',label:'🥶 3 小時失溫'}] });
+  document.getElementById('poll-reveal').onclick = poll333.reveal;
+  if (WK.clean) poll333.reveal();
+  /* 這樣的風雨，要不要從山屋出發 */
+  setupPoll({ doc:'depart', prefix:'d-', box:'depart-options', total:'depart-total', count:true,
+    options:[{id:'go',label:'🚶 出發'},{id:'stay',label:'🏠 不出發'}] });
 
   /* ---------- 全域提問牆 ---------- */
   const qaRef = collection(fdb, SLUG + '_qa');
@@ -1219,7 +1365,7 @@ if(WK.clean){
       const snap = await getDocs(collection(fdb, c));
       for (const d of snap.docs) { await deleteDoc(d.ref); total++; }
     }
-    try { await deleteDoc(doc(fdb, SLUG+'_poll', 'results')); } catch(e){}
+    for (const d of ['results','depart']) { try { await deleteDoc(doc(fdb, SLUG+'_poll', d)); } catch(e){} }
     if(!silent) alert('已清空互動資料，共 ' + total + ' 筆。');
     return total;
   };
@@ -1240,7 +1386,7 @@ if(WK.clean){
   /* ---------- QR code 與切頁重繪 ---------- */
   const BASE = 'https://phu00572.github.io/outdoor-survival-triangle/';
   function makeQR(id, hash){ const el=document.getElementById(id); if(!el || typeof QRCode==='undefined') return; el.innerHTML=''; new QRCode(el, { text: BASE + hash, width: 150, height: 150, correctLevel: QRCode.CorrectLevel.M }); }
-  makeQR('qr-wc', '#/wordcloud'); makeQR('qr-poll', '#/poll');
+  makeQR('qr-wc', '#/wordcloud'); makeQR('qr-poll', '#/poll'); makeQR('qr-depart', '#/depart');
   Reveal.on('slidechanged', e => { if(e.currentSlide && e.currentSlide.id==='wordcloud') setTimeout(drawWordCloud, 200); });
   if (Reveal.getCurrentSlide && Reveal.getCurrentSlide()?.id==='wordcloud') setTimeout(drawWordCloud, 400);
 </script>
