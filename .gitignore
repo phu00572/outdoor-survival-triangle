@@ -3,3 +3,4 @@ _shots/
 *.orig.*
 *.log
 clear_data.py
+*.bak
